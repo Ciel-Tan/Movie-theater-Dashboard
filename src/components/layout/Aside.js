@@ -1,0 +1,61 @@
+'use client';
+
+import Link from "next/link"
+import { useEffect, useState } from "react"
+import { BiCameraMovie, BiSolidCameraMovie } from "react-icons/bi"
+import { IoHomeSharp } from "react-icons/io5";
+import { MdOutlinePlaylistAdd } from "react-icons/md";
+import { RiDraftFill } from "react-icons/ri";
+import { FaUser } from "react-icons/fa";
+import { PiSignInBold } from "react-icons/pi";
+import RenderItemAside from "../render/RenderItemAside";
+import { useRouter } from "next/navigation";
+
+export default function Aside() {
+    const router = useRouter()
+    const [activeLink, setActiveLink] = useState('/')
+
+    const handleLinkClick = (link) => {
+        setActiveLink(link)
+    }
+
+    useEffect(() => {
+        setActiveLink(router.pathname)
+    }, [router.pathname])
+
+    const asideOptions = {
+        mainPages: [
+            {linkEndpoint: '/', icon: <IoHomeSharp />, title: 'Dashboard'},
+            {linkEndpoint: '/movies', icon: <BiSolidCameraMovie />, title: 'Movies'},
+            {linkEndpoint: '/addmovie', icon: <MdOutlinePlaylistAdd />, title: 'Add'},
+            {linkEndpoint: '/draft', icon: <RiDraftFill />, title: 'Draft'},
+        ],
+        accountPages: [
+            {linkEndpoint: '/profile', icon: <FaUser />, title: 'Profile'},
+            {linkEndpoint: '/auth', icon: <PiSignInBold />, title: 'Sign In'},
+        ]
+    }
+
+    return (
+        <div className="aside">
+            <div className="logo flex">
+                <BiCameraMovie />
+                <Link href="/"><h1>MOVIES</h1></Link>
+            </div>
+
+            <RenderItemAside
+                data={asideOptions.mainPages}
+                activeLink={activeLink}
+                onClick={handleLinkClick}
+            />
+
+            <h3 className="mt-2">Account Pages</h3>
+            
+            <RenderItemAside
+                data={asideOptions.accountPages}
+                activeLink={activeLink}
+                onClick={handleLinkClick}
+            />
+        </div>
+    )
+}
