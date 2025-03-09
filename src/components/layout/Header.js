@@ -54,7 +54,7 @@ export default function Header() {
                     <Link href='/'><li><IoLanguage /></li></Link>
                     <Link href='/'><li><IoNotificationsSharp /></li></Link>
                     <Link href='/'><li><MdOutlineStickyNote2 /></li></Link>
-                    <Link href='/'><li><img src="/img/ZeroTwo.jpg" alt="user" /></li></Link>
+                    <Link href='/'><li><img src="/image/ZeroTwo.jpg" alt="user" /></li></Link>
                 </ul>
             </div>
 
