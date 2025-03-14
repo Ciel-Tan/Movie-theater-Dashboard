@@ -27,7 +27,7 @@ export default function Aside() {
         mainPages: [
             {linkEndpoint: '/', icon: <IoHomeSharp />, title: 'Dashboard'},
             {linkEndpoint: '/movies', icon: <BiSolidCameraMovie />, title: 'Movies'},
-            {linkEndpoint: '/addmovie', icon: <MdOutlinePlaylistAdd />, title: 'Add'},
+            {linkEndpoint: '/addMovie', icon: <MdOutlinePlaylistAdd />, title: 'Add'},
             {linkEndpoint: '/draft', icon: <RiDraftFill />, title: 'Draft'},
         ],
         accountPages: [
