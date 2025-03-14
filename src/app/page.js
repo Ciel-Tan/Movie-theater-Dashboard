@@ -14,10 +14,10 @@ export default function Home() {
   const { moviesData, loading, error } = useGetMovie()
 
   const statisticCardInfo = [
-    {title: 'Total Movies', value: moviesData.length, icon: <BiSolidMoviePlay />, img: '/image/chartOne.svg'},
-    // {title: 'Draft Movies', value: draftMovies.length, icon: <BiSolidMoviePlay />, img: '/image/chartTwo.svg'},
-    {title: 'Category', value: 7, icon: <BiSolidMoviePlay />, img: '/image/chartThree.svg'},
-    {title: 'Genre', value: 15, icon: <BiSolidMoviePlay />, img: '/image/chartFour.svg'},
+    {title: 'Total Movies', value: moviesData.length, icon: <BiSolidMoviePlay />, img: '/chartOne.svg'},
+    // {title: 'Draft Movies', value: draftMovies.length, icon: <BiSolidMoviePlay />, img: '/chartTwo.svg'},
+    {title: 'Category', value: 7, icon: <BiSolidMoviePlay />, img: '/chartThree.svg'},
+    {title: 'Genre', value: 15, icon: <BiSolidMoviePlay />, img: '/chartFour.svg'},
   ]
 
   return (

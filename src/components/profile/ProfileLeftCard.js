@@ -1,10 +1,9 @@
-import { accountContext } from "@/context/accountContext";
+import { useAccountContext } from "@/context/accountContext";
 import { useGetAccount } from "@/hooks/useGetAccount";
-import { useContext } from "react";
 import Spinner from "../layout/Spinner";
 
 const ProfileLeftCard = () => {
-    const account_id = useContext(accountContext);
+    const account_id = useAccountContext();
     const { account, loading, error } = useGetAccount(account_id);
 
     return ( 
