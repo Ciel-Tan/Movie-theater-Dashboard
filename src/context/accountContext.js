@@ -17,9 +17,9 @@ export function AccountProvider({ children }) {
             if (token) {
                 try {
                     const payload = await decodeToken(token);
-                    console.log("Token decoded:", payload);
                     setAccountId(payload.account_id);
-                } catch (error) {
+                }
+                catch (error) {
                     console.error("Token decoding failed:", error);
                     setAccountId(null);
                 }

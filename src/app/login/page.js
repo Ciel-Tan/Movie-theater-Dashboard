@@ -2,6 +2,7 @@
 
 import Loader from "@/components/loading/Loader";
 import { useAuth } from "@/hooks/useAuth";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
@@ -65,7 +66,9 @@ const Login = () => {
               <input type="checkbox" id="remember" />
               <label>Remember me</label>
             </div>
-            <a href="#" className="forgot-password">Forgot Password</a>
+            <Link href="/forgot-password" className="forgot-password">
+              Forgot Password
+            </Link>
           </div>
           <button type="submit" className="sign-in">
             {loading ? <Loader /> : 'Sign In'}

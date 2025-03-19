@@ -1,12 +1,25 @@
 'use client'
 
-// import { useSession, signIn, signOut } from "next-auth/react"
+import { getCookieToken, removeCookieToken } from "@/utils/cookie";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 export default function Auth() {
     const router = useRouter();
-    // const {data: session} = useSession();
+    const token = getCookieToken();
+
+    const handleRedirect = () => {
+        router.push('/login');
+    }
+
+    const handleLogin = () => {
+        handleRedirect();
+    }
+
+    const handleLogout = () => {
+        removeCookieToken();
+        handleRedirect();
+    }
 
     return (
         <div className="container">
@@ -20,11 +33,9 @@ export default function Auth() {
                     </p>
                     <button 
                         className="mt-2"
-                        onClick={() => router.push('/login')}
-                        // onClick={session ? signOut : () => signIn('google')}
+                        onClick={token ? handleLogout : handleLogin}
                     >
-                        {/* {session ? "Log out here" : "Log in with Google"} */}
-                        Log in
+                        {token ? "Log out here" : "Log in"}
                     </button>
                 </div>
             </div>

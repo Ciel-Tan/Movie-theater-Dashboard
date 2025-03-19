@@ -10,13 +10,13 @@ export async function middleware(req) {
 
     const payload = await decodeToken(authenticated);
     
-    if (payload.role_name != 'admin' || payload.error) {
-        return NextResponse.redirect(new URL('/auth', req.url));
+    if (payload.role_name != 'admin') {
+        return NextResponse.redirect(new URL('/403-forbidden', req.url));
     }
 
     return NextResponse.next();
 }
 
 export const config = {
-    matcher: ['/movies/:path*', '/addMovie', '/profile']
+    matcher: ['/movies/:path*', '/addMovie', '/profile', '/']
 };

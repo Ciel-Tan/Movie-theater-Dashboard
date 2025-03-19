@@ -1,4 +1,3 @@
-// import { signOut } from "next-auth/react";
 import { MdOutlineAccountCircle } from "react-icons/md";
 
 const ProfileRightCard = () => {
@@ -14,7 +13,7 @@ const ProfileRightCard = () => {
                     <button
                         // onClick={signOut}
                     >
-                        Log out
+                        Change password
                     </button>
                 </div>
             </div>

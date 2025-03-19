@@ -5,41 +5,43 @@ import Aside from "@/components/layout/Aside";
 import Header from "@/components/layout/Header";
 import { usePathname } from "next/navigation";
 import Login from "./login/page";
-import Cookies from "js-cookie";
-import { decodeToken } from "@/utils/decodeToken";
-import { useEffect, useState } from "react";
 import { AccountProvider } from "@/context/accountContext";
+import UnauthorizedPage from "./403-forbidden/page";
+import { getCookieToken } from "@/utils/cookie";
+import ForgotPassword from "./forgot-password/page";
+import { ToastContainer } from "react-toastify";
 
 export default function RootLayout({ children }) {
   const pathname = usePathname();
-  // const [account_id, setAccount_id] = useState(null);
+  const pathOwner = [
+    {path: '/login', component: <Login />},
+    {path: '/403-forbidden', component: <UnauthorizedPage />},
+    {path: '/forgot-password', component: <ForgotPassword />}
+  ]
 
-  // useEffect(() => {
-  //   const fetchAccount = async () => {
-  //     const token = Cookies.get("token");
-  //     console.log("token in layout", token);
+  const currentComponent = pathOwner.find(route => route.path === pathname)?.component;
 
-  //     if (token) {
-  //       const decoded = await decodeToken(token);
-  //       setAccount_id(decoded.account_id);
-  //     }
-  //   };
-
-  //   fetchAccount();
-  // }, []);
+  const token = getCookieToken();
 
   return (
     <html lang="en">
       <body>
-        {pathname === "/login" ? <Login /> :
+        {currentComponent ? currentComponent :
           <AccountProvider>
             <Aside />
-            <div className="container">
-              <Header />
-            </div>
-            <main>{children}</main>
+
+            {token &&
+              <div className="container">
+                <Header />
+              </div>
+            }
+
+            <main>
+              {children}
+            </main>
           </AccountProvider>
         }
+        <ToastContainer />
       </body>
     </html>
   );
