@@ -2,6 +2,8 @@
 
 import Loader from "@/components/loading/Loader";
 import { useAuth } from "@/hooks/useAuth";
+import { createCookieToken } from "@/utils/cookie";
+import { decodeToken } from "@/utils/decodeToken";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -16,14 +18,24 @@ const Login = () => {
 
   const { Login, loading, error } = useAuth();
 
+  const checkAuth = async (payload) => {
+    const decodePayload = await decodeToken(payload.token);
+
+    if (decodePayload.role_name === 'admin') {
+      createCookieToken(payload);
+      router.push('/');
+    }
+    else {
+      router.push('/403-forbidden');
+    }
+  }
+
   const handleLogin = async (e) => {
     e.preventDefault();
     
-    await Login({ email, password });
+    const payload = await Login({ email, password });
     
-    if (!error) {
-      router.push('/');
-    }
+    await checkAuth(payload);
   };
 
   return (

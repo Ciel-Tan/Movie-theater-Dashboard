@@ -1,5 +1,4 @@
 import { login } from "@/services/authService";
-import { createCookieToken } from "@/utils/cookie";
 import axios from "axios";
 import { useState } from "react";
 
@@ -11,13 +10,14 @@ export const useAuth = () => {
         setLoading(true);
         try {
             const authResponse = await login({ email, password });
-            createCookieToken(authResponse);
+            return authResponse;
         }
         catch (err) {
             console.error("Error in login hook:", err);
             if (axios.isAxiosError(err)) {
                 setError(err.response?.data?.message || err.message || "An unexpected error occurred.");
-            } else {
+            }
+            else {
                 setError(err.message || "An unexpected error occurred.");
             }
         }
