@@ -5,7 +5,7 @@ import HeaderTitle from "@/components/title/HeaderTitle"
 import { useGetMovie } from "@/hooks/useGetMovie"
 import { useParams } from "next/navigation"
 
-export default function updateMovie() {
+export default function UpdateMovie() {
     const { movie_id } = useParams()
 
     const { moviesData } = useGetMovie(movie_id)
