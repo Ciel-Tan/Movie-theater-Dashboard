@@ -1,3 +1,4 @@
+import Movie from "@/components/layout/Movie";
 import HeaderTitle from "@/components/title/HeaderTitle";
 
 export default function AddMovie() {
@@ -6,9 +7,8 @@ export default function AddMovie() {
       <div className="blogsAdd">
         <HeaderTitle status="Add" />
 
-
+        <Movie />
       </div>
     </div>
   )
-
 }

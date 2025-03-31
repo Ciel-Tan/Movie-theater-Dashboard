@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
+import { signIn } from "next-auth/react";
 
 const Login = () => {
   const router = useRouter();
@@ -87,10 +88,13 @@ const Login = () => {
           </button>
         </form>
 
-        <div className="google-sign-in">
+        <button
+          className="google-sign-in"
+          onClick={() => signIn('google')}
+        >
           <img src="https://img.icons8.com/?size=100&id=17949&format=png&color=000000" alt="Google Logo" />
           <span>Sign in with Google</span>
-        </div>
+        </button>
         {error && <div className="error">{error}</div>}
       </div>
 

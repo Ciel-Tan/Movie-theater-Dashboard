@@ -20,7 +20,7 @@ const RenderItemMovie = (props) => {
                         <FcRating /> {item.age_rating}
                     </div>
                     <div className="flex gap-2 mt-2">
-                        <Link href={`/movies/edit/${item.movie_id}`}><button>Update movie</button></Link>
+                        <Link href={`/movies/update/${item.movie_id}`}><button>Update movie</button></Link>
                         <Link href={`/movies/delete/${item.movie_id}`}><button>Delete movie</button></Link>
                     </div>
                 </div>

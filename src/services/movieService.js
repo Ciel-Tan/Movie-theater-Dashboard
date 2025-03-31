@@ -6,7 +6,6 @@ export const getAllMovies = async () => {
         return movies;
     } catch (error) {
         console.error("Error in getAllMovies service:", error);
-        throw error;
     }
 };
 
@@ -16,9 +15,16 @@ export const getMovieById = async (id) => {
         return movie;
     } catch (error) {
         console.error("Error in getMovieById service:", error);
-        throw error;
     }
 };
-export const addMovie = (data) => api.post("/api/movies/create", data);
+export const addMovie = async (data) => {
+    try {
+        const { data: movie } = await api.post("/api/movies/create", data)
+        return movie
+    }
+    catch (error) {
+        console.error("Error in addMovie service:", error);
+    }
+};
 export const updateMovie = (id, data) => api.put(`/api/movies/${id}`, data);
 export const deleteMovie = (id) => api.delete(`/api/movies/${id}`);
