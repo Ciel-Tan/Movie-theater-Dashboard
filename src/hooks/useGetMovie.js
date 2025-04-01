@@ -1,3 +1,5 @@
+'use client';
+
 import { getAllMovies, getMovieById } from "@/services/movieService";
 import { useEffect, useState } from "react";
 

@@ -18,13 +18,30 @@ export const getMovieById = async (id) => {
     }
 };
 export const addMovie = async (data) => {
+    console.log("data in service", data)
     try {
-        const { data: movie } = await api.post("/api/movies/create", data)
+        const { data: movie } = await api.post("/api/movies/create", data);
         return movie
     }
     catch (error) {
         console.error("Error in addMovie service:", error);
     }
 };
-export const updateMovie = (id, data) => api.put(`/api/movies/${id}`, data);
-export const deleteMovie = (id) => api.delete(`/api/movies/${id}`);
+export const updateMovie = async (id, data) => {
+    try {
+        const { data: movie } = await api.put(`/api/movies/${id}`, data);
+        return movie
+    }
+    catch (error) {
+        console.error("Error in updateMovie service:", error);
+    }
+}
+export const deleteMovie = async (id) => {
+    try {
+        const response = await api.delete(`/api/movies/${id}`);
+        return response
+    }
+    catch (error) {
+        console.error("Error in deleteMovie service:", error);
+    }
+}

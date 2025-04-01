@@ -3,11 +3,11 @@ const ShowRoomButton = ({ rooms, showRooms, toggleInputVisibility }) => {
         <div className="flex flex-sb">
             {rooms.map((room) => (
                 <div
-                    key={room}
-                    className={showRooms[room] ? 'dreSolBtn active' : 'dreSolBtn'}
-                    onClick={() => toggleInputVisibility(room)}
+                    key={room.room_id}
+                    className={showRooms[room.room_name] ? 'dreSolBtn active' : 'dreSolBtn'}
+                    onClick={() => toggleInputVisibility(room.room_name)}
                 >
-                    {room}
+                    {room.room_name}
                 </div>
             ))}
         </div>

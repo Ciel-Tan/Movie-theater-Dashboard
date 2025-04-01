@@ -1,43 +1,79 @@
 import { useState, useEffect } from 'react';
 import { IoClose } from 'react-icons/io5';
-import ShowRoomButton from './ShowRoomButton';
 import ReactDatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import ShowRoomButton from './ShowRoomButton';
 
 const ButtonTextInput = ({ data, renderItem, toggleInputVisibility, showRooms, onChange }) => {
-    console.log(data)
+    // renderItem is an array of room objects { room_id, room_name }
     const half = Math.ceil(renderItem.length / 2);
     const firstHalf = renderItem.slice(0, half);
     const secondHalf = renderItem.slice(half);
     const renderRoom = [firstHalf, secondHalf];
 
-    // Structure: 
-    // roomData[room] = {
-    //   selectedDate: '', // currently selected date
-    //   timesByDate: {      // map each date to an array of times
-    //      '2025-04-01': ['10:00', '11:00'],
-    //      '2025-04-02': ['22:00', '23:00']
-    //   }
+    // Structure:
+    // roomData[roomName] = {
+    //   selectedDate: '',
+    //   timesByDate: { '2025-04-01': ['10:00', '11:00'] }
     // }
     const [roomData, setRoomData] = useState({});
 
     useEffect(() => {
-        const initialRoomData = {};
-        renderItem.forEach((room) => {
-            if (!roomData[room]) {
-                initialRoomData[room] = {
-                    selectedDate: '',
-                    timesByDate: {},
-                };
+        // Only process data if both data and rooms are available
+        if (data && data.length && renderItem.length) {
+            const initialRoomData = {};
+            data.forEach((item) => {
+            if (item.show_datetime) { // Removed the includes("T") check
+                const [datePart, timePartRaw] = item.show_datetime.split(" ");
+                const formattedTime = timePartRaw ? timePartRaw.substring(0, 5) : "";
+                const roomName = item.room.room_name;
+                
+                // Check if the room exists in renderItem
+                const roomExists = renderItem.some(room => room.room_name === roomName);
+                if (!roomExists) return;
+
+                if (!initialRoomData[roomName]) {
+                    initialRoomData[roomName] = {
+                        selectedDate: datePart,
+                        timesByDate: { [datePart]: [formattedTime] },
+                    };
+                }
+                else {
+                    if (!initialRoomData[roomName].timesByDate[datePart]) {
+                        initialRoomData[roomName].timesByDate[datePart] = [];
+                    }
+                    initialRoomData[roomName].timesByDate[datePart].push(formattedTime);
+                }
             }
-        });
-        setRoomData((prev) => ({ ...prev, ...initialRoomData }));
-    }, [renderItem]);
+            });
+
+            // Merge with existing roomData, preserving user input
+            setRoomData((prev) => {
+            const merged = { ...prev };
+            Object.keys(initialRoomData).forEach((roomName) => {
+                if (!merged[roomName]) {
+                 merged[roomName] = initialRoomData[roomName];
+                }
+                else {
+                    merged[roomName] = {
+                        ...merged[roomName],
+                        timesByDate: {
+                        ...merged[roomName].timesByDate,
+                        ...initialRoomData[roomName].timesByDate,
+                        },
+                    };
+                }
+            });
+            return merged;
+            });
+        }
+    }, [data, renderItem]);
 
     const handleDateChange = (room, value) => {
+        const roomName = room.room_name;
         setRoomData((prev) => {
-            const currentRoom = prev[room];
-            // Check if there are already times stored for the new date; otherwise initialize an empty array (or one empty string if you prefer)
+            const currentRoom = prev[roomName] || { selectedDate: '', timesByDate: {} };
+            // Retrieve times already stored for the new date, or initialize as an array with one empty string
             const currentTimes = currentRoom.timesByDate[value] ?? [''];
             const updatedRoom = {
                 selectedDate: value,
@@ -47,25 +83,24 @@ const ButtonTextInput = ({ data, renderItem, toggleInputVisibility, showRooms, o
                 },
             };
 
-            // Callback when a date is selected with its current times
+            // Notify parent component of the change
             if (value) {
-                setTimeout(() => {
-                    onChange(room, value, currentTimes);
-                }, 0);
+                onChange(room, value, currentTimes.filter(time => time)); // Filter out empty times
             }
 
             return {
                 ...prev,
-                [room]: updatedRoom,
+                [roomName]: updatedRoom,
             };
         });
     };
 
     const handleAddTime = (room) => {
+        const roomName = room.room_name;
         setRoomData((prev) => {
-            const currentRoom = prev[room];
+            const currentRoom = prev[roomName];
             const date = currentRoom.selectedDate;
-            if (!date) return prev; // do nothing if no date is selected
+            if (!date) return prev; // Do nothing if no date is selected
 
             const currentTimes = currentRoom.timesByDate[date] || [''];
             const updatedTimes = [...currentTimes, ''];
@@ -77,20 +112,17 @@ const ButtonTextInput = ({ data, renderItem, toggleInputVisibility, showRooms, o
                 },
             };
 
-            if (date) {
-                onChange(room, date, updatedTimes);
-            }
-
             return {
                 ...prev,
-                [room]: updatedRoom,
+                [roomName]: updatedRoom,
             };
         });
     };
 
     const handleTimeChange = (room, index, value) => {
+        const roomName = room.room_name;
         setRoomData((prev) => {
-            const currentRoom = prev[room];
+            const currentRoom = prev[roomName];
             const date = currentRoom.selectedDate;
             if (!date) return prev;
             const currentTimes = currentRoom.timesByDate[date] || [''];
@@ -104,20 +136,19 @@ const ButtonTextInput = ({ data, renderItem, toggleInputVisibility, showRooms, o
                 },
             };
 
-            if (date) {
-                onChange(room, date, updatedTimes);
-            }
+            onChange(room, date, updatedTimes.filter(time => time)); // Filter out empty times on change
 
             return {
                 ...prev,
-                [room]: updatedRoom,
+                [roomName]: updatedRoom,
             };
         });
     };
 
     const handleRemoveTime = (room, index) => {
+        const roomName = room.room_name;
         setRoomData((prev) => {
-            const currentRoom = prev[room];
+            const currentRoom = prev[roomName];
             const date = currentRoom.selectedDate;
             if (!date) return prev;
             const currentTimes = currentRoom.timesByDate[date] || [];
@@ -130,20 +161,19 @@ const ButtonTextInput = ({ data, renderItem, toggleInputVisibility, showRooms, o
                 },
             };
 
-            if (date) {
-                onChange(room, date, updatedTimes);
-            }
+            onChange(room, date, updatedTimes.filter(time => time)); // Filter out empty times on remove
 
             return {
                 ...prev,
-                [room]: updatedRoom,
+                [roomName]: updatedRoom,
             };
         });
     };
 
     // Helper: get the times for the currently selected date of a room
     const getCurrentTimes = (room) => {
-        const roomInfo = roomData[room];
+        const roomName = room.room_name;
+        const roomInfo = roomData[roomName];
         if (!roomInfo || !roomInfo.selectedDate) return [];
         return roomInfo.timesByDate[roomInfo.selectedDate] || [];
     };
@@ -151,33 +181,51 @@ const ButtonTextInput = ({ data, renderItem, toggleInputVisibility, showRooms, o
     useEffect(() => {
         if (data && data.length) {
             const initialRoomData = {};
-
             data.forEach((item) => {
-            const room = item.room_name;
-            const [dateStr, timeStr] = item.show_datetime.split(" ");
-            const formattedTime = timeStr.substring(0, 5);
-            
-            if (!initialRoomData[room]) {
-                initialRoomData[room] = {
-                    selectedDate: dateStr,
-                    timesByDate: {
-                        [dateStr]: [formattedTime],
-                    },
-                };
-            }
-            else {
-                if (initialRoomData[room].timesByDate[dateStr]) {
-                    initialRoomData[room].timesByDate[dateStr].push(formattedTime);
-                }
-                else {
-                    initialRoomData[room].timesByDate[dateStr] = [formattedTime];
-                }
-            }
-            });
+                // Check if show_datetime exists and contains "T"
+                if (item.show_datetime && item.show_datetime.includes("T")) {
+                    const [datePart, timePartRaw] = item.show_datetime.split("T");
+                    // Ensure timePartRaw is defined before using substring
+                    const formattedTime = timePartRaw ? timePartRaw.substring(0, 5) : "";
+                    const roomName = item.room.room_name;
 
-            setRoomData((prev) => ({ ...prev, ...initialRoomData }));
+                    if (!initialRoomData[roomName]) {
+                        initialRoomData[roomName] = {
+                            selectedDate: datePart,
+                            timesByDate: {
+                                [datePart]: [formattedTime],
+                            },
+                        };
+                    } else {
+                        if (!initialRoomData[roomName].timesByDate[datePart]) {
+                            initialRoomData[roomName].timesByDate[datePart] = [];
+                        }
+                        initialRoomData[roomName].timesByDate[datePart].push(formattedTime);
+                    }
+                }
+            });
+            // Merge with existing roomData to preserve any selections made by the user
+            setRoomData((prev) => {
+                const mergedData = { ...prev };
+                for (const roomName in initialRoomData) {
+                    if (!mergedData[roomName]) {
+                        mergedData[roomName] = initialRoomData[roomName];
+                    } else {
+                        mergedData[roomName] = {
+                            ...mergedData[roomName],
+                            selectedDate: mergedData[roomName].selectedDate || initialRoomData[roomName].selectedDate,
+                            timesByDate: {
+                                ...mergedData[roomName].timesByDate,
+                                ...initialRoomData[roomName].timesByDate,
+                            },
+                        };
+                    }
+                }
+                return mergedData;
+            });
         }
     }, [data]);
+
 
     return (
         <div className="w-80">
@@ -193,26 +241,29 @@ const ButtonTextInput = ({ data, renderItem, toggleInputVisibility, showRooms, o
 
             {/* Render inputs for visible rooms */}
             {renderItem.map((room) => (
-                showRooms[room] && (
-                    <div key={room} className="w-100 mt-1" style={{ display: 'flex', gap: '5px' }}>
+                showRooms[room.room_name] && (
+                    <div key={room.room_id} className="w-100 mt-1" style={{ display: 'flex', gap: '5px' }}>
                         <div style={{ width: '50%' }}>
                             <ReactDatePicker
-                                selected={roomData[room]?.selectedDate ? new Date(roomData[room].selectedDate) : null}
+                                selected={
+                                    roomData[room.room_name]?.selectedDate 
+                                    ? new Date(`${roomData[room.room_name].selectedDate}T00:00:00`)
+                                    : null
+                                }
                                 dateFormat={'dd/MM/yyyy'}
                                 onChange={(date) => {
-                                    const localDate = date.toLocaleDateString('en-CA');
+                                    const localDate = date ? date.toLocaleDateString('en-CA') : '';
                                     handleDateChange(room, localDate);
                                 }}
                                 placeholderText={'Choose a date'}
                                 minDate={new Date()}
                                 dayClassName={(date) => {
                                     const localDate = date.toLocaleDateString('en-CA');
-                                    const times = roomData[room]?.timesByDate[localDate] || [];
+                                    const times = roomData[room.room_name]?.timesByDate[localDate] || [];
                                     return times.some((time) => time && time.trim() !== '') ? 'highlight' : undefined;
                                 }}
                                 calendarClassName="custom-calendar"
                             />
-
                             <div
                                 className="dreSolBtn"
                                 onClick={() => handleAddTime(room)}

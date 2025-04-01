@@ -4,23 +4,26 @@ import { useEffect, useState } from "react";
 import TextInput from "../input/TextInput";
 import SelectOptionInput from "../input/SelectOptionInput";
 import CheckBoxInput from "../input/CheckBoxInput";
-import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useGetGenre } from "@/hooks/useGetGenre";
 import { useGetActor } from "@/hooks/useGetActor";
 import SearchFilterInput from "../input/SearchFilterInput";
 import { useGetRoom } from "@/hooks/useGetRoom";
 import ButtonTextInput from "../input/ButtonTextInput";
+import { useActionMovie } from "@/hooks/useActionMovie";
+import Loader from "../loading/Loader";
+import { toast } from "@/utils/toast";
+import DayInput from "../input/DayInput";
 import formatDay from "@/utils/formatDay";
 
 export default function Movie(props) {
     const { movie = {} } = props;
-    const [redirect, setRedirect] = useState(false);
     const router = useRouter();
 
     const { genresData } = useGetGenre();
     const { actorsData } = useGetActor();
     const { roomsData } = useGetRoom();
+    const { createMovie, editMovie, loading, success, error } = useActionMovie();
 
     const [data, setData] = useState({
         movie_id: movie.movie_id || 0,
@@ -33,18 +36,17 @@ export default function Movie(props) {
         trailer_link: movie.trailer_link || "",
         language: movie.language || "",
         director: movie.director || {},
-        genres: movie.genres?.map((genre) => genre.genre_name) || [],
-        actors: movie.actors?.map((actor) => actor.actor_name) || [],
-        showtime: movie.showtime?.map((showtime) => ({
-            show_datetime: showtime.show_datetime,
-            room_name: showtime.room.room_name,
-        })) || [],
+        genres: movie.genres || [],
+        actors: movie.actors || [],
+        showtime: movie.showtime || [],
     });
 
     useEffect(() => {
-        const formattedDate = data.release_date && formatDay({ date: data.release_date});
-        setData((prevData) => ({ ...prevData, release_date: formattedDate }));
-    }, []);
+        setData((prevData) => ({
+            ...prevData,
+            release_date: formatDay({ date: data.release_date })
+        }));
+    }, [data.release_date]);
 
     const attributes = {
         left: [
@@ -77,29 +79,27 @@ export default function Movie(props) {
         setShowRoom(initialShowRoom);
     }, [roomsData]);
 
-    const showRoomOptions = roomsData.map((room) => room.room_name);
-
     const languageOptions = ["English", "Vietnamese", "Japanese", "Korean", "Chinese", "French", "German", "Thailand", "Spanish"];
-
-    const genreOptions = genresData.map((genre) => genre.genre_name);
 
     const toggleInputVisibility = (roomName) => {
         setShowRoom((prev) => ({ ...prev, [roomName]: !prev[roomName] }));
     };
 
-    const handleInputChange = (roomName, date, times) => {
+    const handleInputChange = (room, date, times) => {
+        const roomName = room.room_name;
         const newShowtime = times
-            .filter((time) => time)
+            .filter(time => time)
             .map((time) => ({
-                show_datetime: `${date}T${time}:00`,
-                room_name: roomName,
+                room: { room_id: room.room_id, room_name: roomName },
+                showtime_id: Date.now(),
+                show_datetime: `${date}T${time}:00`, // Ensure correct datetime format
             }));
 
         setData((prevData) => {
+            // Remove existing showtimes for this room and date
             const filteredShowtime = prevData.showtime.filter(
-                (show) => !(show.room_name === roomName && show.show_datetime.startsWith(date))
+                (show) => !(show.room.room_name === roomName && show.show_datetime.startsWith(date))
             );
-
             return {
                 ...prevData,
                 showtime: [...filteredShowtime, ...newShowtime],
@@ -107,30 +107,37 @@ export default function Movie(props) {
         });
     };
 
-    const handleChange = (e, attr) => {
+    const handleChange = (e, attr, item = null) => {
         const { value, checked } = e.target;
 
         if (attr === "genres") {
             setData((prevData) => ({
                 ...prevData,
                 genres: checked 
-                    ? [...prevData.genres, value] 
-                    : prevData.genres.filter((genre) => genre !== value)
+                    ? [...prevData.genres, item] 
+                    : prevData.genres.filter((genre) => genre !== item),
             }));
         }
         else {
-            setData((prevData) => ({ ...prevData, [attr]: value }));
+            setData((prevData) => ({
+                ...prevData,
+                [attr]: attr === "age_rating" || attr === "run_time" 
+                    ? Number(value) 
+                    : attr === "director"
+                        ? { director_id: Date.now(), director_name: value } 
+                        : value,
+            }));
         }
     };
 
     const handleChangeActor = (actor) => {
         setData((prevData) => {
-            const actorExists = prevData.actors.includes(actor.actor_name);
+            const actorExists = prevData.actors.some((a) => a.actor_id === actor.actor_id);
             return {
                 ...prevData,
                 actors: actorExists 
                     ? prevData.actors
-                    : [...prevData.actors, actor.actor_name],
+                    : [...prevData.actors, actor],
             };
         });
     };
@@ -138,46 +145,36 @@ export default function Movie(props) {
     const handleAddActor = (actor) => {
         setData((prevData) => ({
             ...prevData,
-            actors: [...prevData.actors, actor.actor_name],
+            actors: [...prevData.actors, actor],
         }));
         actorsData.push(actor);
     };
 
     const handleRemoveActor = (actor) => {
-        console.log(actor);
         setData((prevData) => ({
             ...prevData,
-            actors: prevData.actors.filter((a) => a !== actor.actor_name),
+            actors: prevData.actors.filter((a) => a.actor_id !== actor.actor_id),
         }));
     };
 
+    useEffect(() => {
+        if (success) {
+            toast.success(success);
+            router.push('/');
+        }
+        if (error) {
+            toast.error(error);
+        }
+    }, [success, error, router]);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
-        if (movie.movie_id) {
-            try {
-                await axios.put(`/api/movies/${movie.movie_id}`, {...data});
-            }
-            catch (error) {
-                console.error("Error updating movie:", error);
-            }
-        } 
-        else {
-            try {
-                await axios.post('/api/movies/create', data);
-            }
-            catch (error) {
-                console.error("Error creating movie:", error);
-            }
-        }
-
-        setRedirect(true);
+        movie.movie_id ? editMovie(movie.movie_id, data) : createMovie(data);
     };
 
-    if (redirect) {
-        router.push('/');
-        return null;
-    }
+    useEffect(() => {
+        console.log(data);
+    }, [data]);
 
     return (
         <form className="addMovieForm" onSubmit={handleSubmit}>
@@ -216,7 +213,7 @@ export default function Movie(props) {
                             ) : attr.id === 'room' ? (
                                 <ButtonTextInput
                                     data={data.showtime}
-                                    renderItem={showRoomOptions}
+                                    renderItem={roomsData}
                                     toggleInputVisibility={toggleInputVisibility}
                                     showRooms={showRoom}
                                     onChange={handleInputChange}
@@ -245,6 +242,12 @@ export default function Movie(props) {
                                     attribute={attr}
                                     onChange={handleChange}
                                 />
+                            ) : attr.id === 'release_date' ? (
+                                <DayInput
+                                    data={data.release_date}
+                                    attribute={attr}
+                                    onChange={handleChange}
+                                />
                             ) : (
                                 <TextInput
                                     data={attr.id === 'director' ? data.director.director_name : data[attr.id]}
@@ -262,7 +265,7 @@ export default function Movie(props) {
                                 <label htmlFor={attr.id}>{attr.label} : </label>
                                     <CheckBoxInput
                                         data={data.genres}
-                                        renderItem={genreOptions}
+                                        renderItem={genresData}
                                         attribute={attr}
                                         onChange={handleChange}
                                     />
@@ -274,7 +277,9 @@ export default function Movie(props) {
 
             {/* Save */}
             <div className="w-100 mb-2">
-                <button type="submit" className="w-100 flex-center">SAVE DATA</button>
+                <button type="submit" className="w-100 flex-center">
+                    {loading ? <Loader /> : 'SAVE DATA'}
+                </button>
             </div>
         </form>
     );

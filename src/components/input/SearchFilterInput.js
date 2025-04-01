@@ -12,7 +12,7 @@ const SearchFilterInput = (props) => {
     const trimmedQuery = searchQuery.trim().toLowerCase();
 
     const filteredData = trimmedQuery === "check"
-        ? data.filter((item) => selectedData.includes(item.actor_name))
+        ? selectedData
         : trimmedQuery === ""
             ? data
             : data.filter((item) => item.actor_name.toLowerCase().includes(trimmedQuery));
@@ -37,7 +37,7 @@ const SearchFilterInput = (props) => {
                         size={22}
                         color="blue"
                         className="icon"
-                        onClick={() => onAdd({ actor_id: 0, actor_name: trimmedQuery })}
+                        onClick={() => onAdd({ actor_id: Date.now(), actor_name: trimmedQuery })}
                     />
                 )}
             </section>
@@ -52,7 +52,7 @@ const SearchFilterInput = (props) => {
                                 onClick={() => onChange(item)}
                             >
                                 {item.actor_name}
-                                {selectedData.some((selected) => selected === item.actor_name) && (
+                                {selectedData.some((selected) => selected.actor_id === item.actor_id) && (
                                     <span className="search-card-icon">
                                         <FaRegCheckCircle
                                             size={20}

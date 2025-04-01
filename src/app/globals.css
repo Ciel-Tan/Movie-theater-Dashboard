@@ -570,6 +570,20 @@ button {
   border-radius: 20px;
 }
 
+.loadingButton {
+  width: max-content;
+  height: 50px;
+  background-color: #7b57ff;
+  transition-duration: .2s;
+  color: rgb(241, 241, 241);
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: 20px;
+  padding: 0 2rem;
+}
+
 .declineButton:hover {
   background-color: #ebebeb;
   transition-duration: .2s;
