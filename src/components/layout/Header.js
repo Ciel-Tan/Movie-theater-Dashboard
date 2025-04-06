@@ -8,7 +8,7 @@ import { IoLanguage, IoNotificationsSharp } from "react-icons/io5";
 import { MdOutlineStickyNote2 } from "react-icons/md";
 // import { useSession } from "next-auth/react";
 
-export default function Header() {
+export default function Header({ onClick }) {
     // const {data: session} = useSession();
     const session = true
     const [searchQuery, setSearchQuery] = useState('')
@@ -35,7 +35,10 @@ export default function Header() {
     if (session) return (
         <header className="header">
             <div className="flex flex-sb">
-                <div className="headerBar">
+                <div
+                    className="headerBar"
+                    onClick={onClick}
+                >
                     <VscThreeBars />
                 </div>
 

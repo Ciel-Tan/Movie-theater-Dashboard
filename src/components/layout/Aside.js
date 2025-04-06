@@ -11,7 +11,7 @@ import { PiSignInBold } from "react-icons/pi";
 import RenderItemAside from "../render/RenderItemAside";
 import { useRouter } from "next/navigation";
 
-export default function Aside() {
+export default function Aside({ isOpen }) {
     const router = useRouter()
     const [activeLink, setActiveLink] = useState('/')
 
@@ -37,7 +37,7 @@ export default function Aside() {
     }
 
     return (
-        <div className="aside">
+        <div className={`aside ${isOpen ? '' : 'close'}`}>
             <div className="logo flex">
                 <BiCameraMovie />
                 <Link href="/"><h1>MOVIES</h1></Link>

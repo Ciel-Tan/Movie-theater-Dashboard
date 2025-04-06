@@ -22,22 +22,20 @@ export default function Auth() {
     }
 
     return (
-        <div className="container">
-            <div className="loginFront flex flex-center">
-                <div className="loginBox flex flex-col">
-                    <Image src="/image/ZeroTwo.jpg" alt="profile" width={250} height={250} />
-                    <h1>Welcome Admin of CielTanMovies</h1>
-                    <p className="mt-1">
-                        Visit our main website
-                        <a href="https://cieltanmovies.com"> CielTanMovies</a>
-                    </p>
-                    <button 
-                        className="mt-2"
-                        onClick={token ? handleLogout : handleLogin}
-                    >
-                        {token ? "Log out here" : "Log in"}
-                    </button>
-                </div>
+        <div className="loginFront flex flex-center">
+            <div className="loginBox flex flex-col">
+                <Image src="/image/ZeroTwo.jpg" alt="profile" width={250} height={250} />
+                <h1>Welcome Admin of CielTanMovies</h1>
+                <p className="mt-1">
+                    Visit our main website
+                    <a href="https://cieltanmovies.com"> CielTanMovies</a>
+                </p>
+                <button 
+                    className="mt-2"
+                    onClick={token ? handleLogout : handleLogin}
+                >
+                    {token ? "Log out here" : "Log in"}
+                </button>
             </div>
         </div>
     )

@@ -5,12 +5,10 @@ import ProfileRightCard from "@/components/profile/ProfileRightCard";
 
 export default function profile() {
     return (
-        <div className="container">
-            <div className="profileSettings">
-                <ProfileLeftCard />
+        <div className="profileSettings">
+            <ProfileLeftCard />
 
-                <ProfileRightCard />
-            </div>
+            <ProfileRightCard />
         </div>
     )
 }

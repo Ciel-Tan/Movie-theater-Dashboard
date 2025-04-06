@@ -14,7 +14,7 @@ export default function UpdateMovie() {
         <div className="blogPage">
             <HeaderTitle status="Edit" movieInfo={moviesData} />
 
-            <div className="mt-3 container">
+            <div className="mt-3">
                 {moviesData && <Movie key={moviesData.movie_id} movie={moviesData} />}
             </div>
         </div>

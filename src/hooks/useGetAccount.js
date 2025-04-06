@@ -42,9 +42,5 @@ export const useGetAccount = (account_id) => {
         account_id ? getAccountDetail() : getAccounts();
     }, []);
 
-    return {
-        account,
-        loading,
-        error
-    };
+    return { account, loading, error };
 }

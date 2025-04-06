@@ -34,7 +34,7 @@ export default function DeleteMovie() {
     }, [success, error, router]);
 
     return (
-        <div className="blogPage container">
+        <div className="blogPage">
             <HeaderTitle status="Delete" movieInfo={moviesData} />
 
             <div className="deleteSec flex flex-center wh_100">

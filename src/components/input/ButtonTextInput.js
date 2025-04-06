@@ -256,7 +256,7 @@ const ButtonTextInput = ({ data, renderItem, toggleInputVisibility, showRooms, o
                                     handleDateChange(room, localDate);
                                 }}
                                 placeholderText={'Choose a date'}
-                                minDate={new Date()}
+                                // minDate={new Date()}
                                 dayClassName={(date) => {
                                     const localDate = date.toLocaleDateString('en-CA');
                                     const times = roomData[room.room_name]?.timesByDate[localDate] || [];
