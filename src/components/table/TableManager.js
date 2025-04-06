@@ -4,10 +4,6 @@ import { PrePaginate } from "../pagination/PrePaginate";
 import { TablePaginate } from "../pagination/TablePaginate";
 
 const TableManager = ({ data }) => {
-    if (!data || !data.length) {
-        return <p>No data available</p>;
-    }
-
     const [activeRowId, setActiveRowId] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 1;
@@ -47,6 +43,10 @@ const TableManager = ({ data }) => {
         event.stopPropagation();
         setActiveRowId(activeRowId === id ? null : id);
     };
+
+    if (!data || !data.length) {
+        return <p>No data available</p>;
+    }
 
     const headers = Object.keys(currentItems[0]);
     const rows = currentItems.map((item) => (
