@@ -13,7 +13,7 @@ import { format } from 'date-fns';
 import '@/styles/fullCalendar.css';
 import { useGetRoom } from '@/hooks/useGetRoom';
 import { useActionShowtime } from '@/hooks/useActionShowtime';
-import { toastNotify } from '@/utils/toast';
+import { useToastNotify } from '@/utils/toast';
 import Loader from '@/components/loading/Loader';
 import { MdDelete } from "react-icons/md";
 import { customFormatDate } from '@/utils/formatDay';
@@ -78,7 +78,7 @@ export default function SchedulePage() {
     });
   };
 
-  toastNotify(success, actionError, '/schedule');
+  useToastNotify(success, actionError, '/schedule');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -237,7 +237,7 @@ export default function SchedulePage() {
             Are you sure you want to delete this schedule?
           </p>
           <span className='delete-data'>
-            "<i>{customFormatDate(toDelete?.show_datetime, 'dd/MM/yyyy HH:mm')}</i> " for movie: "<i>{toDelete?.movie?.title}</i> "
+             &quot;<i>{customFormatDate(toDelete?.show_datetime, 'dd/MM/yyyy HH:mm')}</i>  &quot; for movie:  &quot;<i>{toDelete?.movie?.title}</i>  &quot;
           </span>
         </div>
         <div className="delete-actions">

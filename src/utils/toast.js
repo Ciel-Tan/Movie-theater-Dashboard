@@ -21,16 +21,18 @@ export const toast = {
   },
 };
 
-export const toastNotify = (success, error, destination) => {
+export const useToastNotify = (success, error, destination) => {
   const router = useRouter();
 
   useEffect(() => {
     if (success) {
       toast.success(success);
-      destination && router.push(destination);
+      if (destination) {
+        router.push(destination);
+      }
     }
     if (error) {
       toast.error(error);
     }
-  }, [success, error, destination]);
+  }, [success, error, destination, router]);
 };

@@ -4,7 +4,7 @@ import Loader from "@/components/loading/Loader";
 import HeaderTitle from "@/components/title/HeaderTitle"
 import { useActionMovie } from "@/hooks/useActionMovie"
 import { useGetMovie } from "@/hooks/useGetMovie"
-import { toastNotify } from "@/utils/toast";
+import { useToastNotify } from "@/utils/toast";
 import { useParams, useRouter } from "next/navigation"
 
 export default function DeleteMovie() {
@@ -22,7 +22,7 @@ export default function DeleteMovie() {
         await removeMovie(movie_id)
     }
 
-    toastNotify(success, error, '/')
+    useToastNotify(success, error, '/')
 
     return (
         <div className="blogPage">

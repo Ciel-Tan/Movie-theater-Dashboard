@@ -12,7 +12,7 @@ import { useGetRoom } from "@/hooks/useGetRoom";
 import ButtonTextInput from "../input/ButtonTextInput";
 import { useActionMovie } from "@/hooks/useActionMovie";
 import Loader from "../loading/Loader";
-import { toastNotify } from "@/utils/toast";
+import { useToastNotify } from "@/utils/toast";
 import DayInput from "../input/DayInput";
 import { formatDay } from "@/utils/formatDay";
 
@@ -157,7 +157,7 @@ export default function Movie(props) {
         }));
     };
 
-    toastNotify(success, error, "/");
+    useToastNotify(success, error, "/");
 
     const handleSubmit = async (e) => {
         e.preventDefault();
