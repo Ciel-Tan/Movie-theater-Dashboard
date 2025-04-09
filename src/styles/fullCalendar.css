@@ -1,0 +1,61 @@
+/* FullCalendar Basic Styles */
+.fc {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+/* Header Toolbar */
+.fc-toolbar {
+    background-color: #f8f8f8;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Title Style */
+.fc-toolbar h2 {
+    margin: 0;
+    color: #333;
+}
+
+/* Day Cells */
+.fc-day {
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+
+/* Event Styles */
+.fc-event {
+    background-color: #007bff;
+    /* Blue background */
+    color: white;
+    /* White text */
+    padding: 5px;
+    border-radius: 4px;
+    text-align: center;
+}
+
+/* Event Hover Effect */
+.fc-event:hover {
+    background-color: #0056b3;
+    /* Darker blue on hover */
+}
+
+/* Today’s Date Highlight */
+.fc-today {
+    background-color: #e9ecef;
+    /* Light gray for today */
+}
+
+/* Responsive Styles */
+@media (max-width: 600px) {
+    .fc-toolbar {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .fc-day {
+        font-size: 12px;
+        /* Smaller font on mobile */
+    }
+}

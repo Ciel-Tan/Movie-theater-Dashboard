@@ -8,6 +8,7 @@ import { MdOutlinePlaylistAdd } from "react-icons/md";
 import { RiDraftFill } from "react-icons/ri";
 import { FaUser } from "react-icons/fa";
 import { PiSignInBold } from "react-icons/pi";
+import { GrSchedulePlay } from "react-icons/gr";
 import RenderItemAside from "../render/RenderItemAside";
 import { useRouter } from "next/navigation";
 
@@ -28,6 +29,7 @@ export default function Aside({ isOpen }) {
             {linkEndpoint: '/', icon: <IoHomeSharp />, title: 'Dashboard'},
             {linkEndpoint: '/movies', icon: <BiSolidCameraMovie />, title: 'Movies'},
             {linkEndpoint: '/addMovie', icon: <MdOutlinePlaylistAdd />, title: 'Add'},
+            {linkEndpoint: '/schedule', icon: <GrSchedulePlay />, title: 'Schedule'},
             {linkEndpoint: '/account', icon: <RiDraftFill />, title: 'Account'},
         ],
         accountPages: [

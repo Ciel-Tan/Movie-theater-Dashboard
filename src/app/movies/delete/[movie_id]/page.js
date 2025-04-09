@@ -4,9 +4,8 @@ import Loader from "@/components/loading/Loader";
 import HeaderTitle from "@/components/title/HeaderTitle"
 import { useActionMovie } from "@/hooks/useActionMovie"
 import { useGetMovie } from "@/hooks/useGetMovie"
-import { toast } from "@/utils/toast";
+import { toastNotify } from "@/utils/toast";
 import { useParams, useRouter } from "next/navigation"
-import { useEffect } from "react"
 
 export default function DeleteMovie() {
     const router = useRouter()
@@ -23,15 +22,7 @@ export default function DeleteMovie() {
         await removeMovie(movie_id)
     }
 
-    useEffect(() => {
-        if (success) {
-            toast.success(success);
-            goBack();
-        }
-        if (error) {
-            toast.error(error);
-        }
-    }, [success, error, router]);
+    toastNotify(success, error, '/')
 
     return (
         <div className="blogPage">

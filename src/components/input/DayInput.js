@@ -1,4 +1,4 @@
-import formatDay from "@/utils/formatDay";
+import { formatDay } from "@/utils/formatDay";
 import { useEffect, useState } from "react";
 
 const DayInput = (props) => {

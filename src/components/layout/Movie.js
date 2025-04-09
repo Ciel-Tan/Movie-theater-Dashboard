@@ -12,9 +12,9 @@ import { useGetRoom } from "@/hooks/useGetRoom";
 import ButtonTextInput from "../input/ButtonTextInput";
 import { useActionMovie } from "@/hooks/useActionMovie";
 import Loader from "../loading/Loader";
-import { toast } from "@/utils/toast";
+import { toastNotify } from "@/utils/toast";
 import DayInput from "../input/DayInput";
-import formatDay from "@/utils/formatDay";
+import { formatDay } from "@/utils/formatDay";
 
 export default function Movie(props) {
     const { movie = {} } = props;
@@ -157,15 +157,7 @@ export default function Movie(props) {
         }));
     };
 
-    useEffect(() => {
-        if (success) {
-            toast.success(success);
-            router.push('/');
-        }
-        if (error) {
-            toast.error(error);
-        }
-    }, [success, error, router]);
+    toastNotify(success, error, "/");
 
     const handleSubmit = async (e) => {
         e.preventDefault();

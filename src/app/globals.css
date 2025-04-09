@@ -666,7 +666,7 @@ button {
 .searchHeaderInput {
   position: relative;
   width: 450px;
-  z-index: 99999999999;
+  /* z-index: 99999999999; */
 }
 
 .searchHeaderInput input,
@@ -1720,4 +1720,41 @@ button {
 .custom-calendar .react-datepicker__month-container {
   width: 100% !important;
   margin-bottom: 0.5rem !important;
+}
+
+/* Loader */
+.rotation-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70vh;
+}
+
+.RotationLoading {
+  width: 48px;
+  height: 48px;
+  border: 3px solid #FFF;
+  border-bottom-color: #FF3D00;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Schedule */
+.Schedule-title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 2rem;
 }

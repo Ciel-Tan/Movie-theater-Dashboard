@@ -1,0 +1,115 @@
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+}
+
+.modal-backdrop.fade-in {
+    animation: fadeIn 0.25s ease-out forwards;
+}
+
+.modal-backdrop.fade-out {
+    animation: fadeOut 0.25s ease-out forwards;
+}
+
+.modal-content {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    padding: 24px;
+}
+
+.modal-content.scale-in {
+    animation: scaleIn 0.25s ease-out forwards;
+}
+
+.modal-content.scale-out {
+    animation: scaleOut 0.25s ease-out forwards;
+}
+
+/* Fade in the backdrop */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Scale & fade in the modal content */
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* === exit === */
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes scaleOut {
+    from {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.95);
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    color: gray;
+    cursor: pointer;
+}
+
+.close-button:hover {
+    color: darkgray;
+}
+
+.poster-image {
+    width: 150px;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    margin: 0 auto;
+}
