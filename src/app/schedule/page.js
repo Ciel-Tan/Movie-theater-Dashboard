@@ -9,7 +9,6 @@ import Modal from '@/components/modal/Modal';
 import { useGetShowtime } from '@/hooks/useGetShowtime';
 import RotationLoading from '@/components/loading/RotationLoading';
 import '@/styles/customModal.css'
-import { format } from 'date-fns';
 import '@/styles/fullCalendar.css';
 import { useGetRoom } from '@/hooks/useGetRoom';
 import { useActionShowtime } from '@/hooks/useActionShowtime';
@@ -89,7 +88,7 @@ export default function SchedulePage() {
       setShowtime((sts) => sts.map((st) => st.showtime_id === editing.showtime_id ? { ...st, ...form } : st));
     }
     else {
-      const newShowtime =await createShowtime(form);
+      const newShowtime = await createShowtime(form);
       setShowtime((sts) => [...sts, newShowtime]);
     }
 

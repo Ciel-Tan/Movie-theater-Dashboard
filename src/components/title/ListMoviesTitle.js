@@ -5,9 +5,11 @@ const ListMoviesTitle = (props) => {
     return (
         <div className="flex flex-sb w-100 movieTitle">
             <h2>List Of {status} Movies</h2>
-            <Link href='/addMovie'>
-                <button>Add Movie</button>
-            </Link>
+            {status === 'Latest' && (
+                <Link href='/addMovie'>
+                    <button>Add Movie</button>
+                </Link>
+            )}
         </div>
     );
 }

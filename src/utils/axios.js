@@ -1,6 +1,13 @@
 import axios from "axios";
 import { getCookieToken } from "./cookie";
 
+export const AI_api = axios.create({
+    baseURL: process.env.NEXT_PUBLIC_API_AI_URL || "http://localhost:5000",
+    headers: {
+        "Content-Type": "application/json",
+    }
+});
+
 const api = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000",
     headers: {
@@ -20,4 +27,4 @@ api.interceptors.request.use(
     },
 );
 
-export default api;
+export { api, AI_api };

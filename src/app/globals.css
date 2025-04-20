@@ -17,6 +17,14 @@ body {
 
 /* ================================================== */
 
+.hide {
+  display: none;
+}
+
+.realFlex {
+  display: flex;
+}
+
 .flex {
   display: flex;
   align-items: center;
@@ -281,7 +289,7 @@ button {
 }
 
 .container {
-  margin-left: 330px
+  margin-left: 330px;
 }
 
 /* ================================================== */
@@ -616,12 +624,20 @@ button {
 
 .header {
   padding-top: 1.8rem;
-  padding-bottom: 1rem;
+  /* padding-bottom: 1rem; */
 }
 
 .header svg {
   color: #555;
   cursor: pointer;
+}
+
+.headerBarContainer {
+  position: fixed;
+  z-index: 99999999999;
+  background-color: #fff;
+  /* width: 75%; */
+  height: 100px;
 }
 
 .headerBar {
@@ -665,14 +681,13 @@ button {
 
 .searchHeaderInput {
   position: relative;
-  width: 450px;
-  /* z-index: 99999999999; */
+  width: 550px;
 }
 
 .searchHeaderInput input,
 .fixedSearch input {
   width: 100%;
-  padding: 8px 10px;
+  padding: 8px 40px 8px 10px;
   border-radius: 10px;
   border: 1px solid rgb(166, 166, 166);
   outline-color: #1043cf;
@@ -682,6 +697,30 @@ button {
 .searchHeaderInput input:focus,
 .fixedSearch input:focus {
   box-shadow: 0 0 10px #1043cf;
+}
+
+.searchIcon {
+  position: absolute;
+  /* top: 50%; */
+  right: 160px;
+  /* transform: translateY(-50%); */
+  z-index: 1;
+}
+
+.searchBtn {
+  padding: 8px 20px;
+  background-color: #0f93ff;
+  color: #fff;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  transition-duration: .2s;
+}
+
+.searchBtn:hover {
+  background-color: #1043cf;
+  transition-duration: .2s;
 }
 
 .fixedSearch {
@@ -712,9 +751,10 @@ button {
 }
 
 .searchResultOfInput {
-  position: absolute;
-  top: 15%;
-  width: 450px;
+  position: fixed;
+  top: 12%;
+  left: 35%;
+  width: 410px;
   max-height: 450px;
   background-color: rgb(227, 227, 227);
   display: flex;
@@ -724,6 +764,7 @@ button {
   gap: 10px;
   overflow-y: scroll;
   padding: 1rem;
+  z-index: 99999999999;
 }
 
 .siResult {
@@ -773,6 +814,21 @@ button {
 
 .udBtns a:last-child:hover {
   background-color: red;
+}
+
+.searchSelect {
+  /* position: absolute;
+  top: 5%;
+  right: 25%; */
+  width: 8rem;
+  padding: 5px 10px;
+  font-size: 20px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.searchSelect option {
+  cursor: pointer;
 }
 
 .closeSearch {
@@ -985,8 +1041,8 @@ button {
 }
 
 .movieCard img {
-  width: 350px;
-  height: 250px;
+  width: 300px;
+  height: 215px;
   object-fit: cover;
   border-radius: 20px;
 }
@@ -999,7 +1055,6 @@ button {
   justify-content: space-between;
   gap: 1rem;
   padding: 1rem;
-  text-transform: capitalize;
 }
 
 .movieCardInfo h3 {
@@ -1757,4 +1812,30 @@ button {
   font-weight: 600;
   color: #000;
   margin-bottom: 2rem;
+}
+
+/* line clamp */
+.clamped-text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  line-clamp: 4;
+  -webkit-line-clamp: 4;
+
+  letter-spacing: 0.025em;
+  text-align: justify;
+}
+
+/* search */
+.searchTime {
+  color: #3b82f6;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.searchTime:hover {
+  color: #1d4ed8;
 }

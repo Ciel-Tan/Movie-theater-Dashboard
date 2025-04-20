@@ -36,6 +36,7 @@ export default function Home() {
 
           {loading ? <Spinner /> : (
             <RenderItemMovie
+              status="Latest"
               data={moviesData}
               numberItems={3}
             />

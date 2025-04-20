@@ -40,7 +40,9 @@ export default function Modal({ isOpen, title, children, onClose }) {
           <h2>{title}</h2>
           <button onClick={handleClose} className="close-button">✕</button>
         </div>
-        <div className="modal-body">{children}</div>
+        <div className="modal-body">
+          {children}
+        </div>
       </div>
     </div>
   );
