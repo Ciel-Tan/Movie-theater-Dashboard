@@ -1,10 +1,9 @@
 'use client';
 
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import TextInput from "../input/TextInput";
 import SelectOptionInput from "../input/SelectOptionInput";
 import CheckBoxInput from "../input/CheckBoxInput";
-import { useRouter } from "next/navigation";
 import { useGetGenre } from "@/hooks/useGetGenre";
 import { useGetActor } from "@/hooks/useGetActor";
 import SearchFilterInput from "../input/SearchFilterInput";
@@ -15,26 +14,27 @@ import Loader from "../loading/Loader";
 import { useToastNotify } from "@/utils/toast";
 import DayInput from "../input/DayInput";
 import { formatDay } from "@/utils/formatDay";
+import { useActionSearchContent } from "@/hooks/useActionSearchContent";
 
 export default function Movie(props) {
     const { movie = {} } = props;
-    const router = useRouter();
 
     const { genresData } = useGetGenre();
     const { actorsData } = useGetActor();
     const { roomsData } = useGetRoom();
-    const { createMovie, editMovie, loading, success, error } = useActionMovie();
+    const { createMovie, editMovie } = useActionMovie();
+    const { processYoutubeUrl, searchLoading, searchSuccess, searchError } = useActionSearchContent();
 
     const [data, setData] = useState({
         movie_id: movie.movie_id || 0,
         title: movie.title || "",
         poster_image: movie.poster_image || "",
         description: movie.description || "",
-        age_rating: movie.age_rating || 0,
+        age_rating: movie.age_rating || 16,
         run_time: movie.run_time || 0,
         release_date: movie.release_date || "",
         trailer_link: movie.trailer_link || "",
-        language: movie.language || "",
+        language: movie.language || "English",
         director: movie.director || {},
         genres: movie.genres || [],
         actors: movie.actors || [],
@@ -157,16 +157,21 @@ export default function Movie(props) {
         }));
     };
 
-    useToastNotify(success, error, "/");
+    useToastNotify(searchSuccess, searchError, "/");
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        movie.movie_id ? editMovie(movie.movie_id, data) : createMovie(data);
-    };
 
-    useEffect(() => {
-        console.log(data);
-    }, [data]);
+        if (movie.movie_id) {
+            await editMovie(movie.movie_id, data);
+        }
+        else {
+            await Promise.all([
+                createMovie(data),
+                processYoutubeUrl(data.poster_image, data.trailer_link, data.language),
+            ]);
+        }
+    };
 
     return (
         <form className="addMovieForm" onSubmit={handleSubmit}>
@@ -270,7 +275,7 @@ export default function Movie(props) {
             {/* Save */}
             <div className="w-100 mb-2">
                 <button type="submit" className="w-100 flex-center">
-                    {loading ? <Loader /> : 'SAVE DATA'}
+                    {searchLoading ? <Loader /> : 'SAVE DATA'}
                 </button>
             </div>
         </form>

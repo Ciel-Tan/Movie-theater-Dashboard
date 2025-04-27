@@ -21,10 +21,10 @@ export const useActionSearchContent = () => {
         }
     };
 
-    const processYoutubeUrl = async (youtube_url, language) => {
+    const processYoutubeUrl = async (poster_url, youtube_url, language) => {
         setSearchLoading(true);
         try {
-            const response = await process(youtube_url, language);
+            const response = await process(poster_url, youtube_url, language);
             setSearchSuccess(response.message);
         }
         catch (error) {

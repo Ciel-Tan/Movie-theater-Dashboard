@@ -13,7 +13,7 @@ const ListMovie = ({ status, data, loading, error, searchQuery }) => {
 
     return (
         <div className="movieCards flex flex-col flex-left gap-2 w-100">
-            <ListMoviesTitle status={status} />
+            <ListMoviesTitle status={status} searchQuery={searchQuery} />
 
             {loading ? <Spinner /> : data.length === 0 ? (
                 <h1 className="flex w-100 flex-center text-center">

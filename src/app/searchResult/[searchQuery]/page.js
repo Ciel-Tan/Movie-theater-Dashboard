@@ -16,7 +16,7 @@ const SearchResult = () => {
 
   const getSearchContent = async () => {
     const data = await searchContentWithTimeStamp(decoded)
-    const similarityData = data.filter((item) => item.similarity_score < 0.7)
+    const similarityData = data.filter((item) => item.similarity_score < 0.6)
     setSearchData(similarityData || [])
   }
 

@@ -3,6 +3,7 @@
 import Loader from "@/components/loading/Loader";
 import HeaderTitle from "@/components/title/HeaderTitle"
 import { useActionMovie } from "@/hooks/useActionMovie"
+import { useActionSearchContent } from "@/hooks/useActionSearchContent";
 import { useGetMovie } from "@/hooks/useGetMovie"
 import { useToastNotify } from "@/utils/toast";
 import { useParams, useRouter } from "next/navigation"
@@ -13,13 +14,17 @@ export default function DeleteMovie() {
 
     const { moviesData } = useGetMovie(movie_id)
     const { removeMovie, loading, success, error } = useActionMovie()
+    const { deleteContentWithTimeStamp } = useActionSearchContent()
 
     const goBack = () => {
         router.push('/')
     }
 
     const handleDelete = async () => {
-        await removeMovie(movie_id)
+        await Promise.all([
+            removeMovie(movie_id),
+            deleteContentWithTimeStamp(movie_id)
+        ])
     }
 
     useToastNotify(success, error, '/')

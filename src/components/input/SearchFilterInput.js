@@ -9,7 +9,8 @@ const SearchFilterInput = (props) => {
 
     const [searchQuery, setSearchQuery] = useState('')
 
-    const trimmedQuery = searchQuery.trim().toLowerCase();
+    const query = searchQuery.trim()
+    const trimmedQuery = query.toLowerCase();
 
     const filteredData = trimmedQuery === "check"
         ? selectedData
@@ -37,7 +38,7 @@ const SearchFilterInput = (props) => {
                         size={22}
                         color="blue"
                         className="icon"
-                        onClick={() => onAdd({ actor_id: Date.now(), actor_name: trimmedQuery })}
+                        onClick={() => onAdd({ actor_id: Math.floor(Date.now() / 1000), actor_name: query })}
                     />
                 )}
             </section>

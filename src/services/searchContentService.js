@@ -1,8 +1,8 @@
 import { AI_api } from "@/utils/axios"
 
-export const process = async (youtube_url, language) => {
+export const process = async (poster_url, youtube_url, language) => {
     try {
-        const { data: response } = await AI_api.post(`/process?youtube_url=${youtube_url}&language=${language}`);
+        const { data: response } = await AI_api.post(`/process?poster_url=${poster_url}&youtube_url=${youtube_url}&language=${language}`);
         return response;
     }
     catch (error) {

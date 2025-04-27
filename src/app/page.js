@@ -6,6 +6,7 @@ import Loading from "@/components/layout/Loading";
 import Spinner from "@/components/layout/Spinner";
 import RenderItemMovie from "@/components/render/RenderItemMovie";
 import ListMoviesTitle from "@/components/title/ListMoviesTitle";
+import { useGetAccount } from "@/hooks/useGetAccount";
 import { useGetGenre } from "@/hooks/useGetGenre";
 import { useGetMovie } from "@/hooks/useGetMovie";
 import { useGetRoom } from "@/hooks/useGetRoom";
@@ -13,15 +14,16 @@ import Link from "next/link";
 import { BiSolidMoviePlay } from "react-icons/bi";
 
 export default function Home() {
-  const { moviesData, loading, error } = useGetMovie()
+  const { moviesData, loading } = useGetMovie()
   const { roomsData } = useGetRoom()
   const { genresData } = useGetGenre()
+  const { account } = useGetAccount()
 
   const statisticCardInfo = [
     {title: 'Total Movies', value: moviesData.length, icon: <BiSolidMoviePlay />, img: '/chartOne.svg'},
-    // {title: 'Draft Movies', value: draftMovies.length, icon: <BiSolidMoviePlay />, img: '/chartTwo.svg'},
-    {title: 'Genres', value: genresData.length, icon: <BiSolidMoviePlay />, img: '/chartThree.svg'},
-    {title: 'Rooms', value: roomsData.length, icon: <BiSolidMoviePlay />, img: '/chartFour.svg'},
+    {title: 'Genres', value: genresData.length, icon: <BiSolidMoviePlay />, img: '/chartTwo.svg'},
+    {title: 'Rooms', value: roomsData.length, icon: <BiSolidMoviePlay />, img: '/chartThree.svg'},
+    {title: 'Total user', value: account.length, icon: <BiSolidMoviePlay />, img: '/chartFour.svg'},
   ]
 
   return (
