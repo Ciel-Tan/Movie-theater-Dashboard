@@ -1,7 +1,7 @@
 import { getAllGenres } from "@/services/genreService";
 import { useEffect, useState } from "react";
 
-export const useGetGenre = (id) => {
+export const useGetGenre = () => {
     const [genresData, setGenresData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);

@@ -1,6 +1,6 @@
 'use client';
 
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import TextInput from "../input/TextInput";
 import SelectOptionInput from "../input/SelectOptionInput";
 import CheckBoxInput from "../input/CheckBoxInput";
@@ -15,6 +15,7 @@ import { useToastNotify } from "@/utils/toast";
 import DayInput from "../input/DayInput";
 import { formatDay } from "@/utils/formatDay";
 import { useActionSearchContent } from "@/hooks/useActionSearchContent";
+import { useGetCinema } from "@/hooks/useGetCinema";
 
 export default function Movie(props) {
     const { movie = {} } = props;
@@ -22,8 +23,9 @@ export default function Movie(props) {
     const { genresData } = useGetGenre();
     const { actorsData } = useGetActor();
     const { roomsData } = useGetRoom();
-    const { createMovie, editMovie } = useActionMovie();
-    const { processYoutubeUrl, searchLoading, searchSuccess, searchError } = useActionSearchContent();
+    const { cinemasData } = useGetCinema();
+    const { createMovie, editMovie, loading, success, error } = useActionMovie();
+    const { processYoutubeUrl } = useActionSearchContent();
 
     const [data, setData] = useState({
         movie_id: movie.movie_id || 0,
@@ -54,7 +56,7 @@ export default function Movie(props) {
             { id: "title", label: "Movie title", placeholder: "Enter the movie title" },
             { id: "description", label: "Description", placeholder: "Enter a brief description" },
             { id: "actors", label: "Actor", placeholder: "Enter an actor" },
-            { id: "room", label: "Room", placeholder: "" },
+            { id: "cinema", label: "Cinema", placeholder: "" },
         ],
         rightUp: [
             { id: "director", label: "Director", placeholder: "Name of the director" },
@@ -69,37 +71,26 @@ export default function Movie(props) {
         ]
     }
 
-    const [showRoom, setShowRoom] = useState({});
-
-    useEffect(() => {
-        const initialShowRoom = roomsData.reduce((acc, room) => {
-            acc[room.room_name] = false;
-            return acc;
-        }, {});
-        setShowRoom(initialShowRoom);
-    }, [roomsData]);
-
     const languageOptions = ["English", "Vietnamese", "Japanese", "Korean", "Chinese", "French", "German", "Thailand", "Spanish"];
 
-    const toggleInputVisibility = (roomName) => {
-        setShowRoom((prev) => ({ ...prev, [roomName]: !prev[roomName] }));
-    };
-
-    const handleInputChange = (room, date, times) => {
-        const roomName = room.room_name;
+    const handleShowtimeChange = (cinema, room, date, times) => {
         const newShowtime = times
             .filter(time => time)
             .map((time) => ({
-                room: { room_id: room.room_id, room_name: roomName },
-                showtime_id: Date.now(),
-                show_datetime: `${date}T${time}:00`, // Ensure correct datetime format
+                showtime_id: Math.ceil(Date.now() / 1000),
+                cinema: cinema,
+                room: room,
+                show_datetime: `${date} ${time}:00.000000`, // Ensure correct datetime format
             }));
+
 
         setData((prevData) => {
             // Remove existing showtimes for this room and date
-            const filteredShowtime = prevData.showtime.filter(
-                (show) => !(show.room.room_name === roomName && show.show_datetime.startsWith(date))
-            );
+            const filteredShowtime = prevData.showtime.filter((show) => !(
+                show.cinema.cinema_name === cinema.cinema_name &&
+                show.room.room_name === room.room_name &&
+                show.show_datetime.startsWith(date)
+            ));
             return {
                 ...prevData,
                 showtime: [...filteredShowtime, ...newShowtime],
@@ -157,7 +148,7 @@ export default function Movie(props) {
         }));
     };
 
-    useToastNotify(searchSuccess, searchError, "/");
+    useToastNotify(success, error, "/");
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -207,13 +198,12 @@ export default function Movie(props) {
                                     onAdd={handleAddActor}
                                     onRemove={handleRemoveActor}
                                 />
-                            ) : attr.id === 'room' ? (
+                            ) : attr.id === 'cinema' ? (
                                 <ButtonTextInput
                                     data={data.showtime}
-                                    renderItem={roomsData}
-                                    toggleInputVisibility={toggleInputVisibility}
-                                    showRooms={showRoom}
-                                    onChange={handleInputChange}
+                                    rooms={roomsData}
+                                    cinemas={cinemasData}
+                                    onChange={handleShowtimeChange}
                                 />
                             ) : (
                                 <TextInput
@@ -275,7 +265,7 @@ export default function Movie(props) {
             {/* Save */}
             <div className="w-100 mb-2">
                 <button type="submit" className="w-100 flex-center">
-                    {searchLoading ? <Loader /> : 'SAVE DATA'}
+                    {loading ? <Loader /> : 'SAVE DATA'}
                 </button>
             </div>
         </form>
