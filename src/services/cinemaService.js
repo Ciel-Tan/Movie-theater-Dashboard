@@ -2,7 +2,7 @@ import { api } from "@/utils/axios";
 
 export const getAllCinemas = async () => {
     try {
-        const { data: cinemas } = await api.get("/api/cinemas/getAll");
+        const { data: cinemas } = await api.get("/api/public/cinemas/getAll");
         return cinemas;
     }
     catch (error) {
