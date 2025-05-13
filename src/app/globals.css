@@ -681,7 +681,12 @@ button {
 
 .searchHeaderInput {
   position: relative;
-  width: 550px;
+  min-width: 550px;
+  max-width: 1000px;
+}
+
+.searchHeaderInput form {
+  width: 100%;
 }
 
 .searchHeaderInput input,
@@ -702,29 +707,40 @@ button {
 .searchIcon {
   position: absolute;
   /* top: 50%; */
-  right: 215px;
+  right: 365px;
+  /* transform: translateY(-50%); */
+  z-index: 1;
+}
+
+.searchMic {
+  position: absolute;
+  /* top: 50%; */
+  right: 300px;
   /* transform: translateY(-50%); */
   z-index: 1;
 }
 
 .microIcon {
-  background-color: #F2F2F2;
-  padding: 9px 10px;
+  /* background-color: #F2F2F2; */
+  padding: 4px 5px;
   border-radius: 50%;
   cursor: pointer;
 }
 
 .microIcon:hover {
   background-color: #d9d9d9;
+  padding: 4px 5px;
+  border-radius: 50%;
+  cursor: pointer;
 }
 
 .recording {
   border: 1px solid #f00;
   background-color: #d9d9d9;
-  padding: 9px 10px;
+  padding: 4px 5px;
   border-radius: 50%;
   cursor: pointer;
-}
+} 
 
 .searchBtn {
   padding: 8px 20px;
@@ -1857,4 +1873,10 @@ button {
 
 .searchTime:hover {
   color: #1d4ed8;
+}
+
+/* voice search */
+.voiceSearchControls {
+  display: flex;
+  align-items: center;
 }

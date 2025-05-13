@@ -1,21 +1,24 @@
 'use client'
 
-import { useRef, useState } from "react"
+import { useRef, useState, useEffect } from "react"
 import { VscThreeBars } from "react-icons/vsc"
 import { PiWindowsLogoBold } from "react-icons/pi";
 import Link from "next/link";
-import { IoSearch } from "react-icons/io5";
 import { IoLanguage, IoNotificationsSharp, IoMic } from "react-icons/io5";
 import { useGetMovie } from "@/hooks/useGetMovie";
 import { useRouter } from "next/navigation";
 
 export default function Header({ onClick }) {
-    const router = useRouter()
     const [searchQuery, setSearchQuery] = useState('')
     const [searchType, setSearchType] = useState('Title')
     const [isRecording, setIsRecording] = useState(false)
-    const mediaRecorderRef = useRef(null);
-    const streamRef = useRef(null);
+    const [voiceSearchLang, setVoiceSearchLang] = useState('vi-VN')
+    const recognitionRef = useRef(null);
+
+    const supportedLanguages = [
+        { code: 'en-US', name: 'English' },
+        { code: 'vi-VN', name: 'Vietnamese' },
+    ];
 
     const { moviesData } = useGetMovie()
 
@@ -23,59 +26,61 @@ export default function Header({ onClick }) {
         ? moviesData
         : moviesData.filter(movie => movie.title.toLowerCase().includes(searchQuery.toLowerCase()))
 
-    const handleDirect = async () => {
+    const router = useRouter()
+    const handleDirect = async (e) => {
+        e.preventDefault();
         if (!searchQuery.trim())
             return;
-        
+
         router.push(`/searchResult/${searchQuery}`)
     }
 
-    const handleRecord = async () => {
+    const handleRecord = () => {
         if (!isRecording) {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                streamRef.current = stream;
-                const mediaRecorder = new MediaRecorder(stream);
-                mediaRecorderRef.current = mediaRecorder;
-                const audioChunks = [];
-
-                mediaRecorder.ondataavailable = (event) => {
-                    if (event.data.size > 0) {
-                        audioChunks.push(event.data);
-                    }
-                };
-
-                mediaRecorder.onstop = () => {
-                    if (!audioChunks.length > 0) {
-                        console.error('No audio data available');
-                        return;
-                    }
-
-                    const audioBlob = new Blob(audioChunks, { type: audioChunks[0].type });
-                    const audioUrl = URL.createObjectURL(audioBlob);
-                    const audio = new Audio(audioUrl);
-                    audio.play().catch((error) => {
-                        console.error('Error playing audio:', error);
-                    });
-
-                    stream.getTracks().forEach((track) => track.stop());
-                    
-                };
-
-                mediaRecorder.start();
-                setIsRecording(true);
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                console.error('Speech recognition not supported');
+                return;
             }
-            catch (error) {
-                console.error('Error starting recording:', error);
-            }
+            const recognition = new SpeechRecognition();
+            recognitionRef.current = recognition;
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = voiceSearchLang;
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                setSearchQuery(transcript);
+                setIsRecording(false);
+            };
+
+            recognition.onerror = (event) => {
+                console.error('Speech recognition error', event.error);
+                setIsRecording(false);
+            };
+
+            recognition.onend = () => {
+                setIsRecording(false);
+            };
+
+            recognition.start();
+            setIsRecording(true);
         }
         else {
-            if (mediaRecorderRef.current) {
-                mediaRecorderRef.current.stop();
+            if (recognitionRef.current) {
+                recognitionRef.current.stop();
             }
             setIsRecording(false);
         }
     };
+
+    useEffect(() => {
+        return () => {
+            if (recognitionRef.current) {
+                recognitionRef.current.stop();
+            }
+        };
+    }, []);
 
     return (
         <header className="header">
@@ -88,25 +93,31 @@ export default function Header({ onClick }) {
                 </div>
 
                 <div className="searchHeaderInput flex flex-sb gap-15">
-                    <input
-                        type="text"
-                        placeholder="Search movies here"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                    />
+                    <form action={`/searchResult/${searchQuery}`} onSubmit={handleDirect}>
+                        <input
+                            type="text"
+                            placeholder="Search movies here"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                        />
+                    </form>
 
-                    <IoSearch
-                        size={20}
-                        className={`searchIcon ${searchType === 'Title' ? 'hide' : ''}`}
-                        onClick={handleDirect}
-                    />
-
-                    <div className={`${isRecording ? 'recording' : 'microIcon'} ${searchType === 'Title' ? 'hide' : ''}`}>
+                    <div className={`searchMic ${isRecording ? 'recording' : 'microIcon'} ${searchType === 'Title' ? 'hide' : ''}`}>
                         <IoMic
                             size={20}
                             onClick={handleRecord}
                         />
                     </div>
+
+                    <select
+                        value={voiceSearchLang}
+                        onChange={(e) => setVoiceSearchLang(e.target.value)}
+                        className={`searchSelect ${searchType === 'Title' ? 'hide' : ''}`}
+                    >
+                        {supportedLanguages.map(lang => (
+                            <option key={lang.code} value={lang.code}>{lang.name}</option>
+                        ))}
+                    </select> 
 
                     <select
                         className="searchSelect"

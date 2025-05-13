@@ -11,8 +11,10 @@ import { PiSignInBold } from "react-icons/pi";
 import { GrSchedulePlay } from "react-icons/gr";
 import RenderItemAside from "../render/RenderItemAside";
 import { useRouter } from "next/navigation";
+import { getCookieToken } from "@/utils/cookie";
 
 export default function Aside({ isOpen }) {
+    const token = getCookieToken();
     const router = useRouter()
     const [activeLink, setActiveLink] = useState('/')
 
@@ -34,7 +36,7 @@ export default function Aside({ isOpen }) {
         ],
         accountPages: [
             {linkEndpoint: '/profile', icon: <FaUser />, title: 'Profile'},
-            {linkEndpoint: '/auth', icon: <PiSignInBold />, title: 'Sign In'},
+            {linkEndpoint: '/auth', icon: <PiSignInBold />, title: token ? 'Sign Out' : 'Sign In'},
         ]
     }
 
