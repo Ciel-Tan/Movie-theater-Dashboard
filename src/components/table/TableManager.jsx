@@ -84,7 +84,7 @@ const TableManager = ({ data }) => {
                                             }
                                         }}
                                     >
-                                        Delete this video
+                                        Delete this user
                                     </p>
                                 </div>
                             )}

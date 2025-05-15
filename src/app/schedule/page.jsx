@@ -8,20 +8,22 @@ import interactionPlugin from '@fullcalendar/interaction';
 import Modal from '@/components/modal/Modal';
 import { useGetShowtime } from '@/hooks/useGetShowtime';
 import RotationLoading from '@/components/loading/RotationLoading';
-import '@/styles/customModal.css'
+import '@/styles/customModal.css';
 import '@/styles/fullCalendar.css';
 import { useGetRoom } from '@/hooks/useGetRoom';
 import { useActionShowtime } from '@/hooks/useActionShowtime';
 import { useToastNotify } from '@/utils/toast';
 import Loader from '@/components/loading/Loader';
-import { MdDelete } from "react-icons/md";
+import { MdDelete } from 'react-icons/md';
 import { customFormatDate } from '@/utils/formatDay';
 import Image from 'next/image';
+import { useGetCinema } from '@/hooks/useGetCinema';
 
 export default function SchedulePage() {
   const { showtimeData, loading, error } = useGetShowtime();
+  const { cinemasData } = useGetCinema();
   const { roomsData } = useGetRoom();
-  const { createShowtime, editShowtime, deleteShowtime, actionShowtime, actionLoading, success, actionError } = useActionShowtime();
+  const { createShowtime, editShowtime, deleteShowtime, actionLoading, success, actionError } = useActionShowtime();
 
   const [showtime, setShowtime] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -29,6 +31,13 @@ export default function SchedulePage() {
   const [editing, setEditing] = useState(null);
   const [toDelete, setToDelete] = useState(null);
   const [form, setForm] = useState({});
+  const [selectedCinema, setSelectedCinema] = useState(0);
+
+  useEffect(() => {
+    if (cinemasData.length > 0) {
+      setSelectedCinema(cinemasData[0].cinema_id);
+    }
+  }, [cinemasData]);
 
   useEffect(() => {
     if (showtimeData.length > 0) {
@@ -38,7 +47,10 @@ export default function SchedulePage() {
 
   const openAdd = (date) => {
     setEditing(null);
-    setForm({ show_datetime: date ? `${date}T00:00` : '' });
+    setForm({
+      cinema: cinemasData.find((c) => c.cinema_id === selectedCinema),
+      show_datetime: date ? `${date}T00:00` : ''
+    });
     setIsModalOpen(true);
   };
 
@@ -55,15 +67,10 @@ export default function SchedulePage() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     setForm((f) => {
       const newForm = { ...f };
-
       if (name === 'title') {
-        newForm.movie = {
-            ...f.movie,
-            title: value,
-        };
+        newForm.movie = { ...f.movie, title: value };
       }
       else if (name === 'room_id') {
         const selectedRoom = roomsData.find((room) => room.room_id === parseInt(value, 10));
@@ -72,26 +79,28 @@ export default function SchedulePage() {
       else {
         newForm[name] = value;
       }
-
       return newForm;
     });
   };
+
+  useEffect(() => {
+    console.log('form:', form);
+  }, [form])
 
   useToastNotify(success, actionError, '/schedule');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (editing) {
       await editShowtime(editing.showtime_id, form);
-
-      setShowtime((sts) => sts.map((st) => st.showtime_id === editing.showtime_id ? { ...st, ...form } : st));
+      setShowtime((sts) =>
+        sts.map((st) => (st.showtime_id === editing.showtime_id ? { ...st, ...form } : st))
+      );
     }
     else {
       const newShowtime = await createShowtime(form);
       setShowtime((sts) => [...sts, newShowtime]);
     }
-
     setIsModalOpen(false);
   };
 
@@ -113,7 +122,25 @@ export default function SchedulePage() {
 
   return (
     <div className="p-8">
-      <h1 className="Schedule-title">Movie Schedule Management</h1>
+      <div className="flex flex-sb mb-2">
+        <h1 className="Schedule-title">Movie Schedule Management</h1>
+        <div className="flex gap-1">
+          <label style={{ fontSize: '1.2rem' }}>Select Cinema:</label>
+          <select
+            className="schedule-select"
+            name='cinema_id'
+            value={selectedCinema}
+            onChange={(e) => setSelectedCinema(parseInt(e.target.value, 10))}
+          >
+            {cinemasData.map((cinema) => (
+              <option key={cinema.cinema_id} value={cinema.cinema_id}>
+                {cinema.cinema_name}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
       {loading ? (
         <RotationLoading />
       ) : error ? (
@@ -125,24 +152,29 @@ export default function SchedulePage() {
           headerToolbar={{
             left: 'prev,next today',
             center: 'title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            right: 'dayGridMonth,timeGridWeek,timeGridDay',
           }}
-          events={
-            showtime.map((st) => ({
-              id: String(st.showtime_id),
-              title: st.movie.title,
-              start: st.show_datetime
-            }))
-          }
-          eventContent={arg => {
+          events={showtime
+            .filter((st) => st.cinema && st.cinema.cinema_id === selectedCinema && st.show_datetime)
+            .map((st) => {
+              const startDate = new Date(st.show_datetime);
+              if (isNaN(startDate.getTime())) {
+                console.error('Invalid date in showtime:', st.show_datetime);
+                return null;
+              }
+              return {
+                id: String(st.showtime_id),
+                title: st.movie.title,
+                start: st.show_datetime,
+              };
+            })
+            .filter(Boolean)}
+          eventContent={(arg) => {
             const formattedTime = customFormatDate(arg.event.start, 'HH:mm');
-            return {
-              html: `<div>${formattedTime} - ${arg.event.title}</div>`
-            };
+            return { html: `<div>${formattedTime} - ${arg.event.title}</div>` };
           }}
           dateClick={handleDateClick}
           eventClick={handleEventClick}
-          // height="auto"
         />
       )}
 
@@ -201,11 +233,7 @@ export default function SchedulePage() {
             />
           </div>
           <div className="form-actions">
-            <button
-              type="button"
-              onClick={() => setIsModalOpen(false)}
-              className="cancel-button"
-            >
+            <button type="button" onClick={() => setIsModalOpen(false)} className="cancel-button">
               Cancel
             </button>
             <button type="submit" className="submit-button">
@@ -215,7 +243,7 @@ export default function SchedulePage() {
               <MdDelete
                 size={32}
                 color="green"
-                cursor={'pointer'}
+                cursor="pointer"
                 className="delete-icon"
                 onClick={() => openDelete(editing)}
               />
@@ -225,31 +253,23 @@ export default function SchedulePage() {
       </Modal>
 
       <Modal isOpen={isDeleteOpen} onClose={() => setIsDeleteOpen(false)}>
-        <div className='delete-image'>
-          <Image
-            src="/image/trash-can.png" alt="trash-can"
-            width={100} height={100}
-          />
+        <div className="delete-image">
+          <Image src="/image/trash-can.png" alt="trash-can" width={100} height={100} />
         </div>
-        <div className='delete-content'>
-          <p className='delete-text'>
-            Are you sure you want to delete this schedule?
-          </p>
-          <span className='delete-data'>
-             &quot;<i>{customFormatDate(toDelete?.show_datetime, 'dd/MM/yyyy HH:mm')}</i>  &quot; for movie:  &quot;<i>{toDelete?.movie?.title}</i>  &quot;
-          </span>
+        <div className="delete-content">
+          <p className="delete-text">Are you sure you want to delete this schedule?</p>
+          {toDelete && (
+            <span className="delete-data">
+              "<i>{customFormatDate(toDelete.show_datetime, 'dd/MM/yyyy HH:mm')}</i> " for movie: "
+              <i>{toDelete.movie.title}</i> "
+            </span>
+          )}
         </div>
         <div className="delete-actions">
-          <button
-            onClick={() => setIsDeleteOpen(false)}
-            className="delete-button cancel"
-          >
+          <button onClick={() => setIsDeleteOpen(false)} className="delete-button cancel">
             Cancel
           </button>
-          <button
-            onClick={confirmDelete}
-            className="delete-button confirm"
-          >
+          <button onClick={confirmDelete} className="delete-button confirm">
             {actionLoading ? <Loader /> : 'Delete'}
           </button>
         </div>

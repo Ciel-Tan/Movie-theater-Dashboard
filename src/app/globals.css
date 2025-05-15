@@ -1846,7 +1846,7 @@ button {
   font-size: 2rem;
   font-weight: 600;
   color: #000;
-  margin-bottom: 2rem;
+  /* margin-bottom: 2rem; */
 }
 
 /* line clamp */
@@ -1879,4 +1879,23 @@ button {
 .voiceSearchControls {
   display: flex;
   align-items: center;
+}
+
+/* form label */
+.schedule-select {
+  padding: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.inputPassword {
+  font-weight: 700;
+  color: #555;
+  border: none;
+  padding: 10px;
+  font-size: 1rem;
+  outline: none;
+  width: 215px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px #c5c5c5;
 }

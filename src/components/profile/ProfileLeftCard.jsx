@@ -9,7 +9,7 @@ const ProfileLeftCard = () => {
     return ( 
         loading ? <Spinner/> : error ? <span className="error">{error}</span> : (
             <div className="leftProfile_details flex">
-                <img src="/image/ZeroTwo-copy.jpg" alt="profile" />
+                <img src="/image/absolute_cinema.jpg" alt="profile" />
                 <div className="w-100">
                     <div className="flex flex-sb flex-left mt-2">
                         <h2>My Profile</h2>

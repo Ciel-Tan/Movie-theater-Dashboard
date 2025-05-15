@@ -133,7 +133,7 @@ export default function Header({ onClick }) {
                     <Link href='/'><li><PiWindowsLogoBold /></li></Link>
                     <Link href='/'><li><IoLanguage /></li></Link>
                     <Link href='/'><li><IoNotificationsSharp /></li></Link>
-                    <Link href='/'><li><img src="/image/ZeroTwo.jpg" alt="user" /></li></Link>
+                    <Link href='/'><li><img src="/image/absolute_cinema.jpg" alt="user" /></li></Link>
                 </ul>
             </div>
 

@@ -24,7 +24,7 @@ export default function Auth() {
     return (
         <div className="loginFront flex flex-center">
             <div className="loginBox flex flex-col">
-                <Image src="/image/ZeroTwo.jpg" alt="profile" width={250} height={250} />
+                <Image src="/image/absolute_cinema.jpg" alt="profile" width={250} height={250} />
                 <h1>Welcome Admin of CielTanMovies</h1>
                 <p className="mt-1">
                     Visit our main website
