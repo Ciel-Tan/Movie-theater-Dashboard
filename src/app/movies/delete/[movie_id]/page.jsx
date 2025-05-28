@@ -14,7 +14,7 @@ export default function DeleteMovie() {
 
     const { moviesData } = useGetMovie(movie_id)
     const { removeMovie, loading, success, error } = useActionMovie()
-    const { deleteContentWithTimeStamp } = useActionSearchContent()
+    const { deleteContentWithTimeStamp, searchLoading } = useActionSearchContent()
 
     const goBack = () => {
         router.push('/')
@@ -48,16 +48,18 @@ export default function DeleteMovie() {
                         If you delete this movie content, it will be permanently delete your content
                     </p>
                     <div className="buttonContainer">
-                        {loading ? <button className="loadingButton"><Loader /></button> : (
-                            <>
-                                <button onClick={handleDelete} className="acceptButton">
-                                    Delete
-                                </button>
-                                <button onClick={goBack} className="declineButton">
-                                    Cancel
-                                </button>
-                            </>
-                        )}
+                        {loading || searchLoading ? (
+                            <button className="loadingButton" disabled>
+                                <Loader />
+                            </button>
+                        ) : (<>
+                            <button onClick={handleDelete} className="acceptButton">
+                                Delete
+                            </button>
+                            <button onClick={goBack} className="declineButton">
+                                Cancel
+                            </button>
+                        </>)}
                     </div>
                 </div>
             </div>
