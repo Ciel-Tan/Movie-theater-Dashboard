@@ -24,7 +24,7 @@ const Login = () => {
 
     if (decodePayload.role_name === 'admin') {
       createCookieToken(payload);
-      router.push('/');
+      window.location.href = '/';
     }
     else {
       router.push('/403-forbidden');
