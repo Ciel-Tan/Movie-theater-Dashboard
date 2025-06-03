@@ -15,7 +15,7 @@ import { useActionShowtime } from '@/hooks/useActionShowtime';
 import { useToastNotify } from '@/utils/toast';
 import Loader from '@/components/loading/Loader';
 import { MdDelete } from 'react-icons/md';
-import { customFormatDate } from '@/utils/formatDay';
+import { customFormatDate } from '@/utils/format';
 import Image from 'next/image';
 import { useGetCinema } from '@/hooks/useGetCinema';
 

@@ -515,6 +515,25 @@ button {
   border-radius: 10px;
 }
 
+.has-dropdown {
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdown-parent {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dropdown-parent:hover {
+  background-color: rgba(88, 124, 234, 0.41);
+}
+
 /* ********************************************** */
 /* *******************************  DELETE PAGE */
 /* ********************************************** */

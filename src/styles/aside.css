@@ -1,0 +1,58 @@
+/* Sidebar Dropdown Styles */
+
+.has-dropdown {
+  position: relative;
+  list-style: none;
+}
+
+.dropdown-parent {
+  padding: 0.75rem 1rem;
+  font-weight: 500;
+  color: #222;
+  background: none;
+  border: none;
+  width: 100%;
+  transition: background 0.2s;
+  border-radius: 6px;
+}
+
+.dropdown-parent.open,
+.dropdown-parent:hover {
+  background: #f0f0f0;
+}
+
+.dropdown-parent span {
+  font-size: 0.8em;
+}
+
+.dropdown-menu {
+  position: static;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  border-radius: 6px;
+  margin: 0.25rem 0 0 1.5rem;
+  padding: 0.25rem 0.5rem;
+  z-index: 10;
+}
+
+.dropdown-menu li {
+  padding: 0.5rem 1rem;
+  color: #444;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  list-style: none;
+}
+
+.dropdown-menu li:hover,
+.dropdown-menu .active {
+  background: #e0e7ff;
+  color: #1d4ed8;
+}
+
+/* Active link styling for sidebar */
+.active {
+  background: #e0e7ff !important;
+  color: #1d4ed8 !important;
+  border-radius: 6px;
+} 

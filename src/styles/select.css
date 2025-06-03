@@ -1,0 +1,87 @@
+.select-container {
+    position: relative;
+    width: 100%;
+}
+
+.select-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background-color: #ffffff;
+    font-size: 0.875rem;
+    line-height: 1.25;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    outline: none;
+}
+
+.select-trigger:hover {
+    border-color: #9ca3af;
+}
+
+.select-trigger:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.select-trigger-open {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.select-trigger-content {
+    flex: 1;
+    text-align: left;
+    color: #111827;
+}
+
+.select-trigger-icon {
+    width: 16px;
+    height: 16px;
+    color: #6b7280;
+    transition: transform 0.15s ease;
+}
+
+.select-trigger-icon-open {
+    transform: rotate(180deg);
+}
+
+.select-content {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    margin-top: 4px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background-color: #ffffff;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.select-item {
+    padding: 8px 12px;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+    color: #111827;
+}
+
+.select-item:hover {
+    background-color: #f3f4f6;
+}
+
+.select-item-selected {
+    background-color: #eff6ff;
+    color: #1d4ed8;
+}
+
+.select-value {
+    color: #6b7280;
+}

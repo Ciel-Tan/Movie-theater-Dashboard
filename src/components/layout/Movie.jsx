@@ -13,7 +13,7 @@ import { useActionMovie } from "@/hooks/useActionMovie";
 import Loader from "../loading/Loader";
 import { useToastNotify } from "@/utils/toast";
 import DayInput from "../input/DayInput";
-import { formatDay } from "@/utils/formatDay";
+import { formatDay } from "@/utils/format";
 import { useActionSearchContent } from "@/hooks/useActionSearchContent";
 import { useGetCinema } from "@/hooks/useGetCinema";
 

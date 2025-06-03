@@ -11,5 +11,15 @@ export async function middleware(req) {
 }
 
 export const config = {
-    matcher: ['/', '/movies/:path*', '/addMovie', '/schedule', '/account', '/profile', '/searchResult/:path*'],
+    matcher: [
+        '/',
+        '/movies/:path*',
+        '/addMovie',
+        '/schedule',
+        '/account',
+        '/profile',
+        '/searchResult/:path*',
+        '/revenue',
+        '/movie-statistics',
+    ],
 };

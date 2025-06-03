@@ -1,4 +1,4 @@
-import { customFormatDate } from "@/utils/formatDay";
+import { customFormatDate } from "@/utils/format";
 import Link from "next/link";
 import { FcRating } from "react-icons/fc";
 import { HighlightedText } from "../text/HighlightedText";

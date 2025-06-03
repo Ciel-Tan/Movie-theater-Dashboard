@@ -5,6 +5,7 @@ export const usePostAccount = () => {
     const [loading, setLoading] = useState(false);
     const [response, setResponse] = useState(null);
     const [error, setError] = useState(null);
+
     const Forgot_Password = async (email) => {
         setLoading(true);
         try {
@@ -20,5 +21,20 @@ export const usePostAccount = () => {
         }
     }
 
-    return { Forgot_Password, loading, response, error };
+    const Delete_Account = async (account_id) => {
+        setLoading(true);
+        try {
+            const response = await accountService.deleteAccount(account_id);
+            setResponse(response);
+        }
+        catch (error) {
+            console.error("Error deleting account in hooks:", error);
+            setError("Failed to delete account", error);
+        }
+        finally {
+            setLoading(false);
+        }
+    }
+
+    return { Forgot_Password, Delete_Account, loading, response, error };
 }

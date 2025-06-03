@@ -1,19 +1,31 @@
+'use client';
+
 import { useEffect, useRef, useState } from "react";
 import { BsThreeDots } from "react-icons/bs";
 import { PrePaginate } from "../pagination/PrePaginate";
 import { TablePaginate } from "../pagination/TablePaginate";
+import Modal from "../modal/Modal";
+import Image from "next/image";
+import Loader from "../loading/Loader";
+import { usePostAccount } from "@/hooks/usePostAccount";
+import { useToastNotify } from "@/utils/toast";
 
 const TableManager = ({ data }) => {
     const [activeRowId, setActiveRowId] = useState(null);
+    const [isDeleteOpen, setIsDeleteOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 1;
+    const itemsPerPage = 10;
     const menuRef = useRef(null);
+
+    const { Delete_Account, loading, response, error } = usePostAccount();
 
     const { currentItems, totalPages, pageNumbers } = PrePaginate(data, currentPage, itemsPerPage);
 
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
     };
+
+    useToastNotify(response, error, "/account");
 
     const centerData = ["Gender", "Age", "Actions"];
 
@@ -44,6 +56,11 @@ const TableManager = ({ data }) => {
         setActiveRowId(activeRowId === id ? null : id);
     };
 
+    const confirmDelete = async () => {
+        await Delete_Account(activeRowId);
+        setIsDeleteOpen(false);
+    };
+
     if (!data || !data.length) {
         return <p>No data available</p>;
     }
@@ -65,6 +82,7 @@ const TableManager = ({ data }) => {
                             type="checkbox"
                             checked={item[header]}
                             className="genderCheckbox"
+                            readOnly
                         />
                     ) : header === "Actions" ? (<>
                             <button
@@ -75,17 +93,17 @@ const TableManager = ({ data }) => {
                             </button>
                             {activeRowId === item.Id && (
                                 <div ref={menuRef} className="menu">
-                                    <p
+                                    <span
+                                        type="button"
                                         className="menu-item"
                                         onClick={(e) => {
-                                            e.stopPropagation();
-                                            if (confirm("Are you sure you want to delete this video?")) {
-                                                handleDelete();
-                                            }
+                                            //e.stopPropagation();
+                                            console.log("🗑️  Delete span clicked!");
+                                            setIsDeleteOpen(true);
                                         }}
                                     >
-                                        Delete this user
-                                    </p>
+                                        Delete this account
+                                    </span>
                                 </div>
                             )}
                         </>
@@ -129,6 +147,25 @@ const TableManager = ({ data }) => {
                         onPageChange={handlePageChange}
                     />
                 </section>
+            )}
+
+            {isDeleteOpen && (
+                <Modal isOpen={isDeleteOpen} onClose={() => setIsDeleteOpen(false)}>
+                    <div className="delete-image">
+                        <Image src="/image/trash-can.png" alt="trash-can" width={100} height={100} />
+                    </div>
+                    <div className="delete-content">
+                        <p className="delete-text">Are you sure you want to delete this account?</p>
+                    </div>
+                    <div className="delete-actions">
+                        <button onClick={() => setIsDeleteOpen(false)} className="delete-button cancel">
+                            Cancel
+                        </button>
+                        <button onClick={confirmDelete} className="delete-button confirm">
+                            {loading ? <Loader /> : 'Delete'}
+                        </button>
+                    </div>
+                </Modal>
             )}
         </div>
     );

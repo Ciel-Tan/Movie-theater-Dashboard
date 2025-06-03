@@ -32,5 +32,16 @@ export const accountService = {
             console.error("Error sending forgot password email in forgotPassword service:", error);
             throw error;
         }
+    },
+
+    async deleteAccount(account_id) {
+        try {
+            const { data: response } = await api.delete(`/api/accounts/${account_id}`);
+            return response.message;
+        }
+        catch (error) {
+            console.error("Error deleting account in deleteAccount service:", error);
+            throw error;
+        }
     }
 }

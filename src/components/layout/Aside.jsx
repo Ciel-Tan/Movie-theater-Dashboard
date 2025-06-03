@@ -28,7 +28,15 @@ export default function Aside({ isOpen }) {
 
     const asideOptions = {
         mainPages: [
-            {linkEndpoint: '/', icon: <IoHomeSharp />, title: 'Dashboard'},
+            {linkEndpoint: '/', icon: <IoHomeSharp />, title: 'Home'},
+            {
+                title: 'Statistics',
+                icon: <MdOutlinePlaylistAdd />,
+                children: [
+                    { linkEndpoint: '/revenue', title: 'Revenue' },
+                    { linkEndpoint: '/movie-statistics', title: 'Movie Revenue' }
+                ]
+            },
             {linkEndpoint: '/movies', icon: <BiSolidCameraMovie />, title: 'Movies'},
             {linkEndpoint: '/addMovie', icon: <MdOutlinePlaylistAdd />, title: 'Add'},
             {linkEndpoint: '/schedule', icon: <GrSchedulePlay />, title: 'Schedule'},

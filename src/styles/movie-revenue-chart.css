@@ -1,0 +1,9 @@
+.movie-chart-container {
+    width: 100%;
+    height: 256px;
+}
+
+.movie-chart-canvas {
+    width: 100%;
+    height: 100%;
+}

@@ -21,3 +21,10 @@ export const customFormatDate = (date, stringFormat) => {
 
   return format(parsedDate, stringFormat);
 };
+
+export const formatVND = (amount) => {
+  return new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND',
+  }).format(amount);
+};
