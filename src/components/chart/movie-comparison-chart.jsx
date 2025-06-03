@@ -17,7 +17,7 @@ export default function MovieComparisonChart({ data }) {
     ctx.clearRect(0, 0, canvas.width, canvas.height)
 
     // Set up dimensions with better spacing
-    const padding = { top: 50, right: 40, bottom: 120, left: 80 }
+    const padding = { top: 100, right: 40, bottom: 50, left: 80 }
     const chartWidth = canvas.width - padding.left - padding.right
     const chartHeight = canvas.height - padding.top - padding.bottom
 
@@ -177,15 +177,15 @@ export default function MovieComparisonChart({ data }) {
     ctx.fillText("Movie Revenue Comparison", canvas.width / 2, 15)
 
     // Y-axis label
-    ctx.fillStyle = "#6b7280"
-    ctx.font = "12px -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
-    ctx.textAlign = "center"
-    ctx.textBaseline = "middle"
-    ctx.save()
-    ctx.translate(20, canvas.height / 2)
-    ctx.rotate(-Math.PI / 2)
-    ctx.fillText("Revenue (VND)", 0, 0)
-    ctx.restore()
+    // ctx.fillStyle = "#6b7280"
+    // ctx.font = "12px -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    // ctx.textAlign = "center"
+    // ctx.textBaseline = "middle"
+    // ctx.save()
+    // ctx.translate(20, canvas.height / 2)
+    // ctx.rotate(-Math.PI / 2)
+    // ctx.fillText("Revenue (VND)", 0, 0)
+    // ctx.restore()
   }, [data])
 
   return (

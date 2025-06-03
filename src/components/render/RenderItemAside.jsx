@@ -15,7 +15,7 @@ const RenderItemAside = (props) => {
         <ul className="mt-2">
             {data.map(({ linkEndpoint, icon, title, children }, index) => (
                 children ? (
-                    <li key={index} className="has-dropdown">
+                    <li key={index} className="has-dropdown" style={{gap : 0}}>
                         <nav
                             className={`dropdown-parent ${openDropdown === index ? 'open' : ''}`}
                             onClick={() => handleDropdown(index)}
@@ -27,7 +27,9 @@ const RenderItemAside = (props) => {
                             <span>{openDropdown === index ? '▲' : '▼'}</span>
                         </nav>
                         {openDropdown === index && (
-                            <ul className="dropdown-menu">
+                            <ul className="dropdown-menu" style={{
+                                animation: openDropdown === index ? 'slideDown 1s ease-in-out forwards' : 'slideUp 1s ease-in-out forwards'
+                            }}>
                                 {children.map((child, childIdx) => (
                                     <Link
                                         key={childIdx}
@@ -35,7 +37,7 @@ const RenderItemAside = (props) => {
                                         className={activeLink === child.linkEndpoint ? 'active' : ''}
                                         onClick={() => onClick(child.linkEndpoint)}
                                     >
-                                        <li>{child.title}</li>
+                                        <li> - {child.title}</li>
                                     </Link>
                                 ))}
                             </ul>

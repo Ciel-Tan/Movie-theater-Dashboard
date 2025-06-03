@@ -1,7 +1,7 @@
 .revenue-container {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
-    padding: 24px;
+    /* padding: 24px; */
     display: flex;
     flex-direction: column;
     gap: 24px;
@@ -41,13 +41,22 @@
 }
 
 .cinema-select-wrapper {
-    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
 }
 
-@media (min-width: 768px) {
-    .cinema-select-wrapper {
-        width: 320px;
-    }
+.cinema-select-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 200px;
+}
+
+.cinema-select-item label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
 }
 
 .cinema-option {
@@ -210,4 +219,57 @@
     color: #6b7280;
     text-align: center;
     margin: 0;
+}
+
+.pagination-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #e5e7eb;
+}
+
+@media (min-width: 768px) {
+    .pagination-container {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+}
+
+.pagination-info {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+.pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.pagination-pages {
+    display: flex;
+    gap: 4px;
+}
+
+.pagination-btn {
+    min-width: 80px;
+}
+
+.pagination-page-btn {
+    min-width: 36px;
+    height: 36px;
+}
+
+.pagination-page-btn:hover {
+    background-color: #f3f4f6;
+}
+
+/* Hide pagination pages on very small screens */
+@media (max-width: 480px) {
+    .pagination-pages {
+        display: none;
+    }
 }

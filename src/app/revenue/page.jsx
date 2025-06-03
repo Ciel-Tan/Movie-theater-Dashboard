@@ -11,12 +11,17 @@ import { useGetCinema } from "@/hooks/useGetCinema"
 import { useGetBooking } from "@/hooks/useGetBooking"
 import "@/styles/revenue.css"
 import { customFormatDate, formatVND } from "@/utils/format"
+import { Button } from "@/components/ui/button"
 
 export default function RevenuePage() {
   const [selectedCinema, setSelectedCinema] = useState("")
+  const [timeFilter, setTimeFilter] = useState("all")
 
   const { cinemasData } = useGetCinema()
   const { bookingsData } = useGetBooking()
+
+  const [itemsPerPage] = useState(10)
+  const [currentPage, setCurrentPage] = useState(1)
 
   useEffect(() => {
     if (cinemasData.length > 0) {
@@ -27,8 +32,29 @@ export default function RevenuePage() {
   // Filter bookings by selected cinema
   const filteredBookings = useMemo(() => {
     if (!selectedCinema) return []
-    return bookingsData.filter((booking) => booking.showtime.cinema.cinema_name === selectedCinema)
-  }, [selectedCinema])
+    let bookings = bookingsData.filter((booking) => booking.showtime.cinema.cinema_name === selectedCinema)
+    
+    if (timeFilter !== "all") {
+      const now = new Date()
+      const filterDate = new Date()
+
+      switch (timeFilter) {
+        case "Last 7 Days":
+          filterDate.setDate(now.getDate() - 7)
+          break
+        case "Last 30 Days":
+          filterDate.setDate(now.getDate() - 30)
+          break
+        case "Last 90 Days":
+          filterDate.setDate(now.getDate() - 90)
+          break
+      }
+
+      bookings = bookings.filter((booking) => new Date(booking.booking_datetime) >= filterDate)
+    }
+    
+    return bookings
+  }, [selectedCinema, bookingsData, timeFilter])
 
   // Calculate revenue metrics
   const revenueMetrics = useMemo(() => {
@@ -36,7 +62,6 @@ export default function RevenuePage() {
       const price = Number(booking.total_price);
       return sum + (isNaN(price) ? 0 : price);
     }, 0);
-    console.log(totalRevenue);
     const totalBookings = filteredBookings.length;
     const totalTickets = filteredBookings.reduce(
       (sum, booking) =>
@@ -79,7 +104,13 @@ export default function RevenuePage() {
     return Object.entries(grouped).map(([movie, revenue]) => ({ movie, revenue }))
   }, [filteredBookings])
 
-  const selectedCinemaName = selectedCinema
+  const paginatedBookings = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage
+    const endIndex = startIndex + itemsPerPage
+    return filteredBookings.slice(startIndex, endIndex)
+  }, [filteredBookings, currentPage, itemsPerPage])
+
+  const totalPages = Math.ceil(filteredBookings.length / itemsPerPage)
 
   return (
     <div className="revenue-container">
@@ -90,7 +121,9 @@ export default function RevenuePage() {
         </div>
 
         <div className="cinema-select-wrapper">
-          <Select value={selectedCinema} onValueChange={setSelectedCinema}>
+          <div className="cinema-select-item">
+            <label>Cinema</label>
+            <Select value={selectedCinema} onValueChange={setSelectedCinema}>
             <SelectTrigger>
               <SelectValue placeholder="Select a cinema" />
             </SelectTrigger>
@@ -102,8 +135,24 @@ export default function RevenuePage() {
                   </div>
                 </SelectItem>
               ))}
+              </SelectContent>
+            </Select>
+          </div>
+          
+          <div className="cinema-select-item">
+            <label>Time</label>
+            <Select value={timeFilter} onValueChange={setTimeFilter}>
+              <SelectTrigger>
+              <SelectValue placeholder="All Time" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Time</SelectItem>
+              <SelectItem value="Last 7 Days">Last 7 Days</SelectItem>
+              <SelectItem value="Last 30 Days">Last 30 Days</SelectItem>
+              <SelectItem value="Last 90 Days">Last 90 Days</SelectItem>
             </SelectContent>
-          </Select>
+            </Select>
+          </div>
         </div>
       </div>
 
@@ -112,7 +161,7 @@ export default function RevenuePage() {
           <div className="selected-cinema-badge">
             <Badge variant="outline" className="cinema-badge">
               <Film className="badge-icon" />
-              {selectedCinemaName}
+              {selectedCinema}
             </Badge>
           </div>
 
@@ -168,7 +217,7 @@ export default function RevenuePage() {
             <Card>
               <CardHeader>
                 <CardTitle>Revenue by Date</CardTitle>
-                <CardDescription>Daily revenue trends for {selectedCinemaName}</CardDescription>
+                <CardDescription>Daily revenue trends for {selectedCinema}</CardDescription>
               </CardHeader>
               <CardContent>
                 <RevenueChart data={revenueByDate} />
@@ -190,7 +239,7 @@ export default function RevenuePage() {
           <Card>
             <CardHeader>
               <CardTitle>Recent Bookings</CardTitle>
-              <CardDescription>Latest booking transactions for {selectedCinemaName}</CardDescription>
+              <CardDescription>Latest booking transactions for {selectedCinema}</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="table-wrapper">
@@ -206,7 +255,7 @@ export default function RevenuePage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredBookings.slice(0, 10).map((booking) => (
+                    {paginatedBookings.map((booking) => (
                       <tr key={booking.booking_id} className="table-row">
                         <td className="table-cell table-cell-bold">#{booking.booking_id}</td>
                         <td className="table-cell">{customFormatDate(booking.booking_datetime, "dd/MM/yyyy")}</td>
@@ -222,6 +271,52 @@ export default function RevenuePage() {
                     ))}
                   </tbody>
                 </table>
+
+                {/* Pagination Controls */}
+                {totalPages > 1 && (
+                  <div className="pagination-container">
+                    <div className="pagination-info">
+                      Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
+                      {Math.min(currentPage * itemsPerPage, filteredBookings.length)} of {filteredBookings.length}{" "}
+                      bookings
+                    </div>
+                    <div className="pagination-controls">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                        disabled={currentPage === 1}
+                        className="pagination-btn"
+                      >
+                        Previous
+                      </Button>
+
+                      <div className="pagination-pages">
+                        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                          <Button
+                            key={page}
+                            variant={currentPage === page ? "default" : "outline"}
+                            size="sm"
+                            onClick={() => setCurrentPage(page)}
+                            className="pagination-page-btn"
+                          >
+                            {page}
+                          </Button>
+                        ))}
+                      </div>
+
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                        disabled={currentPage === totalPages}
+                        className="pagination-btn"
+                      >
+                        Next
+                      </Button>
+                    </div>
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>

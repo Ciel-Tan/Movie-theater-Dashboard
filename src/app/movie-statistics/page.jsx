@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
@@ -34,13 +34,13 @@ export default function MovieStatisticsPage() {
       const filterDate = new Date()
 
       switch (timeFilter) {
-        case "7days":
+        case "Last 7 Days":
           filterDate.setDate(now.getDate() - 7)
           break
-        case "30days":
+        case "Last 30 Days":
           filterDate.setDate(now.getDate() - 30)
           break
-        case "90days":
+        case "Last 90 Days":
           filterDate.setDate(now.getDate() - 90)
           break
       }
@@ -114,10 +114,18 @@ export default function MovieStatisticsPage() {
   // Get selected movie details
   const selectedMovieStats = useMemo(() => {
     if (!selectedMovie || selectedMovie === "all") return null
-    return movieStats.find((stat) => stat.movie.movie_id.toString() === selectedMovie)
+    return movieStats.find((stat) => stat.movie.title === selectedMovie)
   }, [movieStats, selectedMovie])
 
   const selectedCinemaName = selectedCinema === "all" ? "All Cinemas" : selectedCinema;
+
+  useEffect(() => {
+    console.log('Selected Cinema:', selectedCinema);
+  }, [selectedCinema])
+
+  useEffect(() => {
+    console.log('Selected Movie:', selectedMovie);
+  }, [selectedMovie])
 
   return (
     <div className="movie-stats-container">
@@ -153,9 +161,9 @@ export default function MovieStatisticsPage() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Time</SelectItem>
-                <SelectItem value="7days">Last 7 Days</SelectItem>
-                <SelectItem value="30days">Last 30 Days</SelectItem>
-                <SelectItem value="90days">Last 90 Days</SelectItem>
+                <SelectItem value="Last 7 Days">Last 7 Days</SelectItem>
+                <SelectItem value="Last 30 Days">Last 30 Days</SelectItem>
+                <SelectItem value="Last 90 Days">Last 90 Days</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -169,7 +177,7 @@ export default function MovieStatisticsPage() {
               <SelectContent>
                 <SelectItem value="all">All Movies</SelectItem>
                 {availableMovies.map((movie) => (
-                  <SelectItem key={movie.movie_id} value={movie.movie_id.toString()}>
+                  <SelectItem key={movie.movie_id} value={movie.title}>
                     {movie.title}
                   </SelectItem>
                 ))}
@@ -241,7 +249,7 @@ export default function MovieStatisticsPage() {
                     </div>
                   </div>
                 </div>
-                <Button className="view-details-btn" onClick={() => setSelectedMovie(stat.movie.movie_id.toString())}>
+                <Button className="view-details-btn" onClick={() => setSelectedMovie(stat.movie.title)}>
                   View Details
                 </Button>
               </CardContent>
@@ -250,17 +258,6 @@ export default function MovieStatisticsPage() {
         </div>
       </div>
 
-      {/* Movie Comparison Chart */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Revenue Comparison</CardTitle>
-          <CardDescription>Compare revenue performance across movies</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <MovieComparisonChart data={movieStats.slice(0, 8)} />
-        </CardContent>
-      </Card>
-
       {/* Selected Movie Details */}
       {selectedMovieStats && (
         <div className="selected-movie-section">
@@ -268,7 +265,7 @@ export default function MovieStatisticsPage() {
             <CardHeader>
               <div className="selected-movie-header">
                 <img
-                  src={selectedMovieStats.movie.poster_url || "/placeholder.svg"}
+                  src={selectedMovieStats.movie.poster_image || "/placeholder.svg"}
                   alt={selectedMovieStats.movie.title}
                   className="selected-movie-poster"
                 />
@@ -291,7 +288,7 @@ export default function MovieStatisticsPage() {
                 <div className="detailed-stat">
                   <DollarSign className="detailed-stat-icon" />
                   <div>
-                    <div className="detailed-stat-value">${selectedMovieStats.totalRevenue.toLocaleString()}</div>
+                    <div className="detailed-stat-value">{formatVND(selectedMovieStats.totalRevenue)}</div>
                     <div className="detailed-stat-label">Total Revenue</div>
                   </div>
                 </div>
@@ -312,7 +309,7 @@ export default function MovieStatisticsPage() {
                 <div className="detailed-stat">
                   <TrendingUp className="detailed-stat-icon" />
                   <div>
-                    <div className="detailed-stat-value">${selectedMovieStats.revenuePerShow.toFixed(0)}</div>
+                    <div className="detailed-stat-value">{formatVND(selectedMovieStats.revenuePerShow)}</div>
                     <div className="detailed-stat-label">Revenue per Show</div>
                   </div>
                 </div>
@@ -351,6 +348,17 @@ export default function MovieStatisticsPage() {
           </Card>
         </div>
       )}
+
+      {/* Movie Comparison Chart */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Revenue Comparison</CardTitle>
+          <CardDescription>Compare revenue performance across movies</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <MovieComparisonChart data={movieStats.slice(0, 8)} />
+        </CardContent>
+      </Card>
 
       {movieStats.length === 0 && (
         <Card>

@@ -12,6 +12,7 @@ import { GrSchedulePlay } from "react-icons/gr";
 import RenderItemAside from "../render/RenderItemAside";
 import { useRouter } from "next/navigation";
 import { getCookieToken } from "@/utils/cookie";
+import { ChartNoAxesCombined } from "lucide-react";
 
 export default function Aside({ isOpen }) {
     const token = getCookieToken();
@@ -31,7 +32,7 @@ export default function Aside({ isOpen }) {
             {linkEndpoint: '/', icon: <IoHomeSharp />, title: 'Home'},
             {
                 title: 'Statistics',
-                icon: <MdOutlinePlaylistAdd />,
+                icon: <ChartNoAxesCombined />,
                 children: [
                     { linkEndpoint: '/revenue', title: 'Revenue' },
                     { linkEndpoint: '/movie-statistics', title: 'Movie Revenue' }

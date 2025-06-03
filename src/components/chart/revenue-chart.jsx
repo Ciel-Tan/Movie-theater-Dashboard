@@ -16,8 +16,11 @@ export default function RevenueChart({ data }) {
     // Clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height)
 
+    // Sort data by date in ascending order
+    const sortedData = [...data].sort((a, b) => new Date(a.date) - new Date(b.date));
+
     // Set up dimensions with better spacing
-    const padding = { top: 40, right: 40, bottom: 80, left: 80 }
+    const padding = { top: 80, right: 40, bottom: 30, left: 80 }
     const chartWidth = canvas.width - padding.left - padding.right
     const chartHeight = canvas.height - padding.top - padding.bottom
 
@@ -62,10 +65,10 @@ export default function RevenueChart({ data }) {
     ctx.stroke()
 
     // Calculate bar dimensions
-    const barWidth = (chartWidth / data.length) * 0.8
-    const barSpacing = (chartWidth / data.length) * 0.2
+    const barWidth = (chartWidth / sortedData.length) * 0.8
+    const barSpacing = (chartWidth / sortedData.length) * 0.2
 
-    data.forEach((item, index) => {
+    sortedData.forEach((item, index) => {
       const barHeight = (item.revenue / maxRevenue) * chartHeight
       const x = padding.left + index * (barWidth + barSpacing) + barSpacing / 2
       const y = padding.top + chartHeight - barHeight
