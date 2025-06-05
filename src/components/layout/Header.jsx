@@ -7,6 +7,7 @@ import Link from "next/link";
 import { IoLanguage, IoNotificationsSharp, IoMic } from "react-icons/io5";
 import { useGetMovie } from "@/hooks/useGetMovie";
 import { useRouter } from "next/navigation";
+import { Globe } from "lucide-react";
 
 export default function Header({ onClick }) {
     const [searchQuery, setSearchQuery] = useState('')
@@ -14,6 +15,7 @@ export default function Header({ onClick }) {
     const [isRecording, setIsRecording] = useState(false)
     const [voiceSearchLang, setVoiceSearchLang] = useState('vi-VN')
     const recognitionRef = useRef(null);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     const supportedLanguages = [
         { code: 'en-US', name: 'English' },
@@ -109,15 +111,33 @@ export default function Header({ onClick }) {
                         />
                     </div>
 
-                    <select
-                        value={voiceSearchLang}
-                        onChange={(e) => setVoiceSearchLang(e.target.value)}
-                        className={`searchSelect ${searchType === 'Title' ? 'hide' : ''}`}
-                    >
-                        {supportedLanguages.map(lang => (
-                            <option key={lang.code} value={lang.code}>{lang.name}</option>
-                        ))}
-                    </select> 
+                    <div className={`globeDropdown ${searchType === 'Title' ? 'hide' : ''}`}>
+                        {searchType === 'Content' && (
+                            <button
+                                className="globeButton"
+                                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                                title="Select voice search language"
+                            >
+                                <Globe size={20} />
+                            </button>
+                        )}
+                        {isDropdownOpen && (
+                            <div className="dropdownMenu">
+                                {supportedLanguages.map(lang => (
+                                    <div
+                                        key={lang.code}
+                                        className={`dropdownItem ${voiceSearchLang === lang.code ? 'selected' : ''}`}
+                                        onClick={() => {
+                                            setVoiceSearchLang(lang.code);
+                                            setIsDropdownOpen(false);
+                                        }}
+                                    >
+                                        {lang.name}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
 
                     <select
                         className="searchSelect"

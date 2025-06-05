@@ -10,10 +10,10 @@ import MoviePerformanceChart from "@/components/chart/movie-performance-chart"
 import MovieComparisonChart from "@/components/chart/movie-comparison-chart"
 import { useGetCinema } from "@/hooks/useGetCinema"
 import { useGetBooking } from "@/hooks/useGetBooking"
-import "@/styles/movie-statistics.css"
 import { formatVND } from "@/utils/format"
+import "@/styles/movie-performance.css"
 
-export default function MovieStatisticsPage() {
+export default function MoviePerformancePage() {
   const [selectedCinema, setSelectedCinema] = useState("all")
   const [selectedMovie, setSelectedMovie] = useState("all")
   const [timeFilter, setTimeFilter] = useState("all")

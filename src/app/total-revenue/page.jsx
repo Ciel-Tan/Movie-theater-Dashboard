@@ -9,11 +9,11 @@ import RevenueChart from "@/components/chart/revenue-chart"
 import MovieRevenueChart from "@/components/chart/movie-revenue-chart"
 import { useGetCinema } from "@/hooks/useGetCinema"
 import { useGetBooking } from "@/hooks/useGetBooking"
-import "@/styles/revenue.css"
 import { customFormatDate, formatVND } from "@/utils/format"
 import { Button } from "@/components/ui/button"
+import "@/styles/total-revenue.css"
 
-export default function RevenuePage() {
+export default function TotalRevenuePage() {
   const [selectedCinema, setSelectedCinema] = useState("")
   const [timeFilter, setTimeFilter] = useState("all")
 

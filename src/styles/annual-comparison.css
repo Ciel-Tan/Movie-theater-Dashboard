@@ -1,0 +1,341 @@
+.year-comparison-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.year-comparison-header {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+@media (min-width: 1024px) {
+    .year-comparison-header {
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: space-between;
+    }
+}
+
+.year-comparison-title-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.year-comparison-title {
+    font-size: 2rem;
+    font-weight: bold;
+    letter-spacing: -0.025em;
+    margin: 0;
+    color: #111827;
+}
+
+.year-comparison-subtitle {
+    color: #6b7280;
+    margin: 4px 0 0 0;
+}
+
+.year-comparison-filters {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+@media (min-width: 768px) {
+    .year-comparison-filters {
+        flex-direction: row;
+        gap: 20px;
+    }
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 200px;
+}
+
+.filter-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+}
+
+.selected-cinema-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.cinema-badge {
+    font-size: 0.875rem;
+}
+
+.badge-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 4px;
+}
+
+.year-selection-grid {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.year-card {
+    padding: 20px;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+    background: #ffffff;
+}
+
+.year-card:hover {
+    border-color: #3b82f6;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+}
+
+.year-card-selected {
+    border-color: #3b82f6;
+    background: #eff6ff;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+}
+
+.year-card-year {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #111827;
+    margin-bottom: 8px;
+}
+
+.year-card-revenue {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #3b82f6;
+    margin-bottom: 4px;
+}
+
+.year-card-details {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+.yearly-overview-section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.section-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0;
+    color: #111827;
+}
+
+.yearly-overview-grid {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+    .yearly-overview-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1200px) {
+    .yearly-overview-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.yearly-overview-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.yearly-overview-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.yearly-card-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 8px;
+}
+
+.yearly-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+.yearly-icon {
+    height: 20px;
+    width: 20px;
+    color: #6b7280;
+}
+
+.yearly-value {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #111827;
+    margin-bottom: 8px;
+}
+
+.yearly-growth {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 12px;
+}
+
+.growth-positive {
+    color: #059669;
+}
+
+.growth-negative {
+    color: #dc2626;
+}
+
+.growth-neutral {
+    color: #6b7280;
+}
+
+.growth-icon {
+    width: 16px;
+    height: 16px;
+}
+
+.growth-icon-down {
+    transform: rotate(180deg);
+}
+
+.yearly-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 12px;
+}
+
+.yearly-stat {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+.yearly-average {
+    font-size: 0.875rem;
+    color: #059669;
+    font-weight: 500;
+}
+
+.charts-section {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.charts-grid {
+    display: grid;
+    gap: 24px;
+    grid-template-columns: 1fr;
+}
+
+@media (min-width: 1024px) {
+    .charts-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.monthly-breakdown-container {
+    overflow-x: auto;
+}
+
+.monthly-breakdown-table {
+    min-width: 600px;
+}
+
+.monthly-table {
+    width: 100%;
+    font-size: 0.875rem;
+    border-collapse: collapse;
+}
+
+.monthly-header-row {
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.monthly-header {
+    text-align: left;
+    padding: 12px 8px;
+    font-weight: 600;
+    color: #374151;
+    background-color: #f9fafb;
+}
+
+.monthly-header-right {
+    text-align: right;
+}
+
+.monthly-row {
+    border-bottom: 1px solid #e5e7eb;
+    transition: background-color 0.15s ease;
+}
+
+.monthly-row:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+.monthly-cell {
+    padding: 10px 8px;
+}
+
+.monthly-cell-bold {
+    font-weight: 500;
+    color: #374151;
+}
+
+.monthly-cell-right {
+    text-align: right;
+    font-weight: 500;
+}
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 0;
+}
+
+.empty-state-icon {
+    height: 48px;
+    width: 48px;
+    color: #6b7280;
+    margin-bottom: 16px;
+}
+
+.empty-state-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+}
+
+.empty-state-description {
+    color: #6b7280;
+    text-align: center;
+    margin: 0;
+}

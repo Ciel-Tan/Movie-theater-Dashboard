@@ -763,7 +763,7 @@ button {
 .searchMic {
   position: absolute;
   /* top: 50%; */
-  right: 300px;
+  right: 200px;
   /* transform: translateY(-50%); */
   z-index: 1;
 }
@@ -1946,4 +1946,48 @@ button {
   width: 215px;
   border-radius: 10px;
   box-shadow: 0 0 10px #c5c5c5;
+}
+
+/* Styles for globe icon language dropdown */
+.globeDropdown {
+  position: relative;
+  display: inline-block;
+  z-index: 1000;
+}
+
+.globeButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  color: #6b7280;
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: white;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-top: 5px;
+  min-width: 120px;
+  z-index: 10;
+}
+
+.dropdownItem {
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  color: #111827;
+}
+
+.dropdownItem:hover {
+  background-color: #f3f4f6;
+}
+
+.dropdownItem.selected {
+  background-color: #eff6ff;
+  color: #1d4ed8;
 }

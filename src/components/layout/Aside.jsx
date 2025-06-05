@@ -34,8 +34,9 @@ export default function Aside({ isOpen }) {
                 title: 'Statistics',
                 icon: <ChartNoAxesCombined />,
                 children: [
-                    { linkEndpoint: '/revenue', title: 'Revenue' },
-                    { linkEndpoint: '/movie-statistics', title: 'Movie Revenue' }
+                    { linkEndpoint: '/total-revenue', title: 'Total Revenue' },
+                    { linkEndpoint: '/movie-performance', title: 'Movie Performance' },
+                    { linkEndpoint: '/annual-comparison', title: 'Annual Comparison' }
                 ]
             },
             {linkEndpoint: '/movies', icon: <BiSolidCameraMovie />, title: 'Movies'},
