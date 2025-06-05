@@ -19,7 +19,8 @@ export const config = {
         '/account',
         '/profile',
         '/searchResult/:path*',
-        '/revenue',
-        '/movie-statistics',
+        '/total-revenue',
+        '/movie-performance',
+        '/annual-comparison',
     ],
 };

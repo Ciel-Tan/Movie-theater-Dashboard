@@ -1,0 +1,83 @@
+.confirm-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.confirm-modal-container {
+    width: 100%;
+    max-width: 450px;
+}
+
+.confirm-modal-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.confirm-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.confirm-modal-title-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.confirm-modal-icon {
+    width: 20px;
+    height: 20px;
+    color: #ef4444;
+}
+
+.close-btn {
+    padding: 8px;
+}
+
+.close-icon {
+    width: 16px;
+    height: 16px;
+}
+
+.confirm-modal-content {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+}
+
+.confirm-modal-message {
+    font-size: 0.95rem;
+    color: #374151;
+    margin: 0;
+}
+
+.account-name {
+    font-weight: 600;
+}
+
+.confirm-modal-warning {
+    font-size: 0.875rem;
+    color: #ef4444;
+    margin: 0;
+}
+
+.confirm-modal-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    padding-top: 16px;
+    margin-top: 8px;
+}

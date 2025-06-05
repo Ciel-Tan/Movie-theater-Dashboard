@@ -1,0 +1,349 @@
+.account-management-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.account-management-header {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+@media (min-width: 768px) {
+    .account-management-header {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0;
+    }
+}
+
+.account-management-title-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.account-management-title {
+    font-size: 1.875rem;
+    font-weight: bold;
+    letter-spacing: -0.025em;
+    margin: 0;
+    color: #111827;
+}
+
+.account-management-subtitle {
+    color: #6b7280;
+    margin: 4px 0 0 0;
+}
+
+.add-account-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-icon {
+    width: 16px;
+    height: 16px;
+}
+
+.stats-grid {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.stat-card-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 8px;
+}
+
+.stat-title {
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.stat-icon {
+    height: 16px;
+    width: 16px;
+    color: #6b7280;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.stat-description {
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin: 0;
+}
+
+/* New styles for accounts card header */
+.accounts-card-header {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+@media (min-width: 1024px) {
+    .accounts-card-header {
+        flex-direction: row;
+        align-items: center;
+        gap: 24px;
+    }
+}
+
+.accounts-header-left {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.accounts-header-right {
+    width: 100%;
+}
+
+@media (min-width: 1024px) {
+    .accounts-header-right {
+        width: auto;
+    }
+}
+
+.header-filters {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+@media (min-width: 768px) {
+    .header-filters {
+        flex-direction: row;
+        gap: 16px;
+        align-items: center;
+    }
+}
+
+.header-search-group {
+    flex: 1;
+    min-width: 250px;
+}
+
+@media (min-width: 1024px) {
+    .header-search-group {
+        flex: 0 0 300px;
+    }
+}
+
+.search-input-wrapper {
+    position: relative;
+}
+
+.search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    color: #6b7280;
+}
+
+.header-search-input {
+    width: 100%;
+    padding: 8px 30px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    outline: none;
+    transition: border-color 0.15s ease;
+}
+
+.header-search-input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.header-filter-group {
+    flex: 0 0 auto;
+    min-width: 120px;
+}
+
+.header-select {
+    min-width: 120px;
+}
+
+.accounts-table-wrapper {
+    overflow-x: auto;
+}
+
+.accounts-table {
+    width: 100%;
+    font-size: 0.875rem;
+    border-collapse: collapse;
+    min-width: 1000px;
+}
+
+.table-header-row {
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.table-header {
+    text-align: left;
+    padding: 12px 8px;
+    font-weight: 600;
+    color: #374151;
+    background-color: #f9fafb;
+}
+
+.table-header-center {
+    text-align: center;
+}
+
+.table-row {
+    border-bottom: 1px solid #e5e7eb;
+    transition: background-color 0.15s ease;
+}
+
+.table-row:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+.table-cell {
+    padding: 12px 8px;
+    vertical-align: top;
+}
+
+.table-cell-bold {
+    font-weight: 500;
+}
+
+.table-cell-center {
+    text-align: center;
+}
+
+.account-name-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.account-name {
+    font-weight: 500;
+    color: #111827;
+}
+
+.account-email {
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+.contact-icon {
+    width: 12px;
+    height: 12px;
+    flex-shrink: 0;
+}
+
+.personal-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.personal-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+.personal-icon {
+    width: 12px;
+    height: 12px;
+    flex-shrink: 0;
+}
+
+.membership-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.discount-rate {
+    font-size: 0.75rem;
+    color: #059669;
+    font-weight: 500;
+}
+
+.badge-icon {
+    width: 12px;
+    height: 12px;
+    margin-right: 4px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
+.action-btn {
+    padding: 4px 8px;
+}
+
+.action-icon {
+    width: 14px;
+    height: 14px;
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.pagination-info {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
