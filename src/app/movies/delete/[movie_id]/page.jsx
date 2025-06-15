@@ -6,7 +6,9 @@ import { useActionMovie } from "@/hooks/useActionMovie"
 import { useActionSearchContent } from "@/hooks/useActionSearchContent";
 import { useGetMovie } from "@/hooks/useGetMovie"
 import { useToastNotify } from "@/utils/toast";
+import { getYoutubeVideoId } from "@/utils/youtube";
 import { useParams, useRouter } from "next/navigation"
+import { useMemo } from "react";
 
 export default function DeleteMovie() {
     const router = useRouter()
@@ -16,6 +18,10 @@ export default function DeleteMovie() {
     const { removeMovie, loading, success, error } = useActionMovie()
     const { deleteContentWithTimeStamp, searchLoading } = useActionSearchContent()
 
+    const videoId = useMemo(() => {
+        return getYoutubeVideoId(moviesData?.trailer_link)
+    }, [moviesData?.trailer_link])
+
     const goBack = () => {
         router.push('/')
     }
@@ -23,7 +29,7 @@ export default function DeleteMovie() {
     const handleDelete = async () => {
         await Promise.all([
             removeMovie(movie_id),
-            deleteContentWithTimeStamp(movie_id)
+            deleteContentWithTimeStamp(videoId)
         ])
     }
 
