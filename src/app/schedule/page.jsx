@@ -18,11 +18,13 @@ import { MdDelete } from 'react-icons/md';
 import { customFormatDate } from '@/utils/format';
 import Image from 'next/image';
 import { useGetCinema } from '@/hooks/useGetCinema';
+import { useGetMovie } from '@/hooks/useGetMovie';
 
 export default function SchedulePage() {
   const { showtimeData, loading, error } = useGetShowtime();
   const { cinemasData } = useGetCinema();
   const { roomsData } = useGetRoom();
+  const { moviesData } = useGetMovie();
   const { createShowtime, editShowtime, deleteShowtime, actionLoading, success, actionError } = useActionShowtime();
 
   const [showtime, setShowtime] = useState([]);
@@ -49,7 +51,9 @@ export default function SchedulePage() {
     setEditing(null);
     setForm({
       cinema: cinemasData.find((c) => c.cinema_id === selectedCinema),
-      show_datetime: date ? `${date}T00:00` : ''
+      show_datetime: date ? `${date}T00:00` : '',
+      movie: {},
+      room: {},
     });
     setIsModalOpen(true);
   };
@@ -69,14 +73,13 @@ export default function SchedulePage() {
     const { name, value } = e.target;
     setForm((f) => {
       const newForm = { ...f };
-      if (name === 'title') {
-        newForm.movie = { ...f.movie, title: value };
-      }
-      else if (name === 'room_id') {
+      if (name === 'movie_id') {
+        const selectedMovie = moviesData.find((movie) => movie.movie_id === parseInt(value, 10));
+        newForm.movie = selectedMovie || {};
+      } else if (name === 'room_id') {
         const selectedRoom = roomsData.find((room) => room.room_id === parseInt(value, 10));
         newForm.room = selectedRoom || {};
-      }
-      else {
+      } else {
         newForm[name] = value;
       }
       return newForm;
@@ -184,7 +187,7 @@ export default function SchedulePage() {
         onClose={() => setIsModalOpen(false)}
       >
         <form onSubmit={handleSubmit} className="modal-form">
-          {editing && (
+          {form.movie?.poster_image && (
             <div className="form-group">
               <img
                 src={form.movie?.poster_image || '/image/noImage.jpg'}
@@ -195,14 +198,20 @@ export default function SchedulePage() {
           )}
           <div className="form-group">
             <label className="form-label">Title</label>
-            <input
-              type="text"
-              name="title"
-              value={form.movie?.title || ''}
+            <select
               onChange={handleChange}
-              className="form-input"
+              name="movie_id"
+              value={form.movie?.movie_id || ''}
+              className="form-select"
               required
-            />
+            >
+              <option value="">Select Movie</option>
+              {moviesData.map((movie) => (
+                <option key={movie.movie_id} value={movie.movie_id}>
+                  {movie.title}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="form-group">
             <label className="form-label">Room</label>
